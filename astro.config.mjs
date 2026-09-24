@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
 
 export default defineConfig({
-	site: 'https://www.bsw-heating.com/',
+	site: 'https://bsw-website.netlify.app/',
 	output: 'server',
 	adapter: node({ mode: 'standalone' }),
 	image: {
