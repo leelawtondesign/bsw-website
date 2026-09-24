@@ -17,6 +17,7 @@ export const OPENING_HOURS = 'Monday to Friday, 9am-5pm';
 export const MAP_EMBED_URL =
 	'https://www.google.com/maps?q=BSW+Heating+Ltd,+3+Old+Barn+Lane,+Kenley,+Surrey,+CR8+5AT&output=embed';
 
-// TODO: replace with the live portal URLs
+// TODO: replace with the live URLs
+export const WINTER_ADVICE_VIDEO_LINK = '#';
 export const RESIDENT_LOGIN_LINK = '#';
 export const CLIENT_LOGIN_LINK = '#';

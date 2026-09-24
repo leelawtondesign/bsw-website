@@ -1,0 +1,20 @@
+---
+import { Phone } from '@lucide/astro';
+import Button from '../Button.astro';
+import { PHONE } from '../../consts';
+---
+
+<section class='bg-bsw-orange py-15 md:py-20 mb-6.25'>
+	<div class='content-wrapper flex flex-col items-center gap-5.5 text-center text-white'>
+		<div class='flex flex-col gap-1.75 max-w-139'>
+			<h2 class='text-h4'>Still no heating or hot water?</h2>
+			<p class='text-lg leading-7'>
+				If these tips haven’t worked, and you are still without heating or hot water, please call us on
+			</p>
+		</div>
+		<Button variant='white' href={`tel:${PHONE.replace(/\s/g, '')}`}>
+			<Phone size={20} stroke-width={1.5} />
+			{PHONE}
+		</Button>
+	</div>
+</section>

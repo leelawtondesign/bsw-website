@@ -1,6 +1,6 @@
 ---
 interface Props {
-	variant?: 'primary' | 'outline' | 'outline-light';
+	variant?: 'primary' | 'outline' | 'outline-light' | 'dark' | 'white';
 	size?: 'sm' | 'md';
 	id?: string;
 	fullWidth?: boolean;
@@ -25,9 +25,11 @@ const variantMap = {
 	primary: 'bg-bsw-orange border-bsw-orange text-white hover:bg-bsw-orange-text hover:border-bsw-orange-text hover:text-white',
 	outline: 'border-bsw-orange text-bsw-orange-text hover:bg-bsw-orange hover:text-white',
 	'outline-light': 'border-white text-white hover:bg-white hover:text-bsw-navy',
+	dark: 'bg-bsw-navy border-bsw-navy text-white hover:bg-text-primary hover:border-text-primary hover:text-white',
+	white: 'bg-white border-white text-grey-600 hover:bg-primary-100 hover:border-primary-100 hover:text-text-primary',
 };
 
-const base = `inline-flex items-center justify-center border rounded-[11px] font-semibold leading-[1.4] text-center whitespace-nowrap transition-colors duration-300 cursor-pointer
+const base = `inline-flex items-center justify-center gap-1.25 border rounded-[11px] font-semibold leading-[1.4] text-center whitespace-nowrap transition-colors duration-300 cursor-pointer
 	${size === 'md' ? 'px-8.5 py-3.5 text-base' : 'px-8.5 py-1.75 text-sm'}
 	${fullWidth ? 'w-full' : ''}
 	${variantMap[variant]}

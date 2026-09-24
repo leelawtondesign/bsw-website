@@ -6,12 +6,17 @@ interface Props {
 	title: string;
 	subtitle?: string;
 	image?: ImageMetadata;
+	variant?: 'navy' | 'orange';
 }
 
-const { title, subtitle, image } = Astro.props;
+const { title, subtitle, image, variant = 'navy' } = Astro.props;
 ---
 
-<section class='bg-bsw-navy mx-4 rounded-[19px] overflow-hidden relative lg:min-h-94.25 flex'>
+<section
+	class:list={[
+		'mx-4 rounded-[19px] overflow-hidden relative lg:min-h-94.25 flex',
+		variant === 'orange' ? 'bg-gradient-orange' : 'bg-bsw-navy',
+	]}>
 	{
 		image && (
 			<>
