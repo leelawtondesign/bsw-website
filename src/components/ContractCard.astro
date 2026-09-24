@@ -15,7 +15,7 @@ interface Props {
 const { client, location, summary, logo, logoAlt, href } = Astro.props;
 ---
 
-<div class='bg-light-grey-bg rounded-[18px] px-7 py-10 flex flex-col items-start gap-4 h-full'>
+<div class='bg-light-grey-bg rounded-2xl px-7 py-10 flex flex-col items-start gap-4 h-full'>
 	<Image src={logo} alt={logoAlt} height={82} class='h-10.25 w-auto' />
 
 	<div class='flex flex-col gap-1'>
@@ -26,7 +26,7 @@ const { client, location, summary, logo, logoAlt, href } = Astro.props;
 	<hr class='w-full border-grey-100' />
 
 	<div class='flex flex-col items-start gap-2.5 flex-1'>
-		<p class='text-text-primary text-sm leading-5.25'>{summary}</p>
+		<p class='text-text-secondary text-sm leading-5.25'>{summary}</p>
 		{href && <LinkArrow text='Read full case study' ariaLabel={`Read the ${client} case study`} href={href} class='mt-auto' />}
 	</div>
 </div>

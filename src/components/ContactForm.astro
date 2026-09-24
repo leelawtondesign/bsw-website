@@ -26,7 +26,11 @@ const linkClass = variant === 'dark' ? 'text-bsw-orange hover:text-white' : 'tex
 		<TextInput id='phone' type='tel' label='Contact number' autocomplete='tel' class='col-span-6 sm:col-span-3' />
 		<TextInput id='message' label='Message' rows={4} required class='col-span-6 h-32.5' />
 
-		<p class='col-span-6 py-1.5 text-[11px] leading-4.5 text-text-secondary'>
+		<p
+			class:list={[
+				'col-span-6 py-1.5 text-[13px] leading-5',
+				variant === 'dark' ? 'text-text-secondary-dark' : 'text-text-secondary',
+			]}>
 			This site is protected by reCAPTCHA and the Google{' '}
 			<a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer' class={linkClass}
 				>Privacy Policy</a

@@ -1,4 +1,6 @@
 ---
+import LinkArrow from './LinkArrow.astro';
+
 interface Props {
 	title: string;
 	description: string;
@@ -23,4 +25,6 @@ const Tag = href ? 'a' : 'div';
 	<h3 class='text-text-primary'>{title}</h3>
 
 	<p class='text-text-secondary text-sm leading-5.25'>{description}</p>
+
+	{href && <LinkArrow text='Learn more' class='mt-auto' />}
 </Tag>

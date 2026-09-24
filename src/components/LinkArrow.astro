@@ -26,7 +26,7 @@ const Tag = href ? 'a' : 'span';
 	aria-label={ariaLabel}
 	target={target}
 	rel={target === '_blank' ? 'noopener noreferrer' : undefined}
-	class={`link-arrow inline-flex items-center gap-1.75 py-1.5 border-b-[1.5px] text-xs leading-4 font-bold transition-all duration-200 ${className}`}
+	class={`link-arrow inline-flex items-center gap-1.75 py-1.5 border-b-[1.5px] text-sm leading-5 font-bold transition-all duration-200 ${className}`}
 	style={`--link-color: ${colors.text}; --link-border: ${colors.border}; --link-hover: ${colors.hover};`}>
 	{text}
 	<ArrowRight size={15} stroke-width={1.5} />

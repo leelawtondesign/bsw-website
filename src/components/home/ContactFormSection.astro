@@ -1,14 +1,44 @@
 ---
+import { Clock, Mail, MapPin, Phone } from '@lucide/astro';
 import ContactForm from '../ContactForm.astro';
+import { ADDRESS_LINE_1, ADDRESS_LINE_2, EMAIL, OPENING_HOURS, PHONE } from '../../consts';
+
+const details = [
+	{ icon: Phone, label: 'Call us', value: PHONE, href: `tel:${PHONE.replace(/\s/g, '')}` },
+	{ icon: Mail, label: 'Email us', value: EMAIL, href: `mailto:${EMAIL}` },
+	{ icon: MapPin, label: 'Visit our office', value: `${ADDRESS_LINE_1} ${ADDRESS_LINE_2}` },
+	{ icon: Clock, label: 'Opening hours', value: OPENING_HOURS },
+];
 ---
 
 <section class='content-wrapper py-15 md:py-17.5 scroll-m-10' id='contact-form-section'>
 	<div class='grid grid-cols-12 gap-y-10 md:gap-x-6.5 items-start'>
-		<!-- Left: intro -->
+		<!-- Left: intro + contact details -->
 		<div class='col-span-12 md:col-span-6 flex flex-col items-start gap-3'>
-			<p class='uppercase-tag text-bsw-orange-text'>Get in touch</p>
 			<h2 class='text-text-primary'>Any questions? Just ask</h2>
 			<p class='text-text-primary max-w-114'>Fill out the form and one of our team will be in touch shortly.</p>
+
+			<ul class='flex flex-col gap-5 mt-7'>
+				{
+					details.map((detail) => (
+						<li class='flex items-start gap-4'>
+							<span class='inline-flex items-center justify-center p-2.5 rounded-xl bg-primary-100 text-bsw-orange-text shrink-0'>
+								<detail.icon size={22} stroke-width={1.5} />
+							</span>
+							<span class='flex flex-col'>
+								<span class='text-sm text-text-secondary'>{detail.label}</span>
+								{detail.href ? (
+									<a href={detail.href} class='font-semibold text-text-primary hover:text-bsw-orange-text transition-colors'>
+										{detail.value}
+									</a>
+								) : (
+									<span class='font-semibold text-text-primary'>{detail.value}</span>
+								)}
+							</span>
+						</li>
+					))
+				}
+			</ul>
 		</div>
 
 		<!-- Right: form card -->

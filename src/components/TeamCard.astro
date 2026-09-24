@@ -11,9 +11,9 @@ interface Props {
 const { name, role, image } = Astro.props;
 ---
 
-<div class='relative rounded-[10px] overflow-hidden aspect-255/330 bg-grey-50'>
+<div class='relative rounded-xl overflow-hidden aspect-255/330 bg-grey-50'>
 	<Image src={image} alt={`${name}, ${role}`} class='w-full h-full object-cover' />
-	<div class='absolute bottom-2.5 inset-x-2 bg-bsw-navy/88 rounded-[10px] px-3.5 py-3 text-white'>
+	<div class='absolute bottom-2.5 inset-x-2 bg-bsw-navy/88 rounded-xl px-3.5 py-3 text-white'>
 		<p class='text-xl font-semibold leading-7'>{name}</p>
 		<p class='text-sm leading-5.25'>{role}</p>
 	</div>

@@ -7,14 +7,15 @@ interface Props {
 	subtitle?: string;
 	image?: ImageMetadata;
 	variant?: 'navy' | 'orange';
+	align?: 'left' | 'center';
 }
 
-const { title, subtitle, image, variant = 'navy' } = Astro.props;
+const { title, subtitle, image, variant = 'navy', align = 'left' } = Astro.props;
 ---
 
 <section
 	class:list={[
-		'mx-4 rounded-[19px] overflow-hidden relative lg:min-h-94.25 flex',
+		'mx-4 rounded-2xl overflow-hidden relative lg:min-h-94.25 flex',
 		variant === 'orange' ? 'bg-gradient-orange' : 'bg-bsw-navy',
 	]}>
 	{
@@ -38,7 +39,8 @@ const { title, subtitle, image, variant = 'navy' } = Astro.props;
 	<div
 		class:list={[
 			'content-wrapper relative z-10 hero-content flex flex-col gap-3 text-white pt-36 pb-12',
-			image ? 'items-start lg:pt-54.5 lg:pb-15.5' : 'items-center text-center lg:pt-47.25 lg:pb-23',
+			image ? 'lg:pt-54.5 lg:pb-15.5' : 'lg:pt-47.25 lg:pb-23',
+			align === 'center' ? 'items-center text-center' : 'items-start',
 		]}>
 		<h1>{title}</h1>
 		{subtitle && <p class='text-lg leading-7 max-w-118'>{subtitle}</p>}

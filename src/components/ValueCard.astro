@@ -8,9 +8,9 @@ interface Props {
 const { number, title, description } = Astro.props;
 ---
 
-<div class='relative bg-light-grey-bg rounded-[18px] px-7 pt-16.75 pb-7.5 flex flex-col gap-3 h-full min-h-50'>
+<div class='relative bg-light-grey-bg rounded-2xl px-7 pt-16.75 pb-7.5 flex flex-col gap-3 h-full min-h-50'>
 	<!-- Number tab cut out of the card's top-left corner -->
-	<div class='absolute top-0 left-0 bg-white rounded-br-[10px] w-16.5 h-10.5 px-3 py-2.5 flex items-center justify-center'>
+	<div class='absolute top-0 left-0 bg-white rounded-br-xl w-16.5 h-10.5 px-3 py-2.5 flex items-center justify-center'>
 		<span class='text-xl font-semibold leading-7 text-bsw-orange-text'>{number}</span>
 		<span class='inverted-corner absolute top-0 left-full' aria-hidden='true'></span>
 		<span class='inverted-corner absolute top-full left-0' aria-hidden='true'></span>

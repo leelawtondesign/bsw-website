@@ -14,8 +14,8 @@ export const EMAIL = 'enquiries@bsw-heating.com';
 export const COMPANY_NUMBER = '1047746';
 export const VAT_NUMBER = 'GB 927 2929 93';
 export const OPENING_HOURS = 'Monday to Friday, 9am-5pm';
-export const MAP_EMBED_URL =
-	'https://www.google.com/maps?q=BSW+Heating+Ltd,+3+Old+Barn+Lane,+Kenley,+Surrey,+CR8+5AT&output=embed';
+// Pin-only embed by coordinates (CR8 5AT), so Google's business card and reviews aren't shown
+export const MAP_EMBED_URL = 'https://maps.google.com/maps?q=51.31599,-0.084429&z=16&output=embed';
 
 // TODO: replace with the live URLs
 export const WINTER_ADVICE_VIDEO_LINK = '#';

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import BswLogo from '../assets/brand/bsw_logo.svg';
+import BswLogo from '../assets/brand/bsw_logo_white.svg';
 import { ADDRESS_LINE_1, ADDRESS_LINE_2, COMPANY_NUMBER, EMAIL, PHONE, VAT_NUMBER } from '../consts';
 
 const today = new Date();
@@ -20,19 +20,19 @@ const companyLinks = [
 	{ href: '/contact', label: 'Contact Us' },
 ];
 
-const linkClass = 'text-xs leading-5 tracking-[0.6px] text-text-secondary hover:text-white transition-colors';
-const headingClass = 'text-xs leading-5 tracking-[0.6px] font-bold text-white';
+const linkClass = 'text-sm leading-5 text-text-secondary-dark hover:text-white transition-colors';
+const headingClass = 'text-sm leading-5 font-bold text-white';
 ---
 
-<footer class='bg-bsw-navy mx-4 mb-4 rounded-[18px] py-15 md:py-21.25 print:hidden'>
+<footer class='bg-bsw-navy mx-4 mb-4 rounded-2xl py-15 md:py-21.25 print:hidden'>
 	<div class='content-wrapper'>
-		<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 pb-11.25 border-b border-text-secondary'>
+		<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 pb-11.25 border-b border-text-secondary-dark'>
 			<!-- Logo & tagline -->
 			<div class='flex flex-col gap-8.25'>
 				<a href='/' aria-label='BSW Heating home'>
 					<Image src={BswLogo} alt='BSW Heating' class='w-23 h-10' />
 				</a>
-				<p class='text-sm leading-5.25 text-text-secondary max-w-60'>
+				<p class='text-sm leading-5.25 text-text-secondary-dark max-w-60'>
 					BSW Heating Limited is a domestic and commercial heating servicing, maintenance and installation company.
 				</p>
 			</div>
@@ -40,7 +40,7 @@ const headingClass = 'text-xs leading-5 tracking-[0.6px] font-bold text-white';
 			<!-- Location & contact -->
 			<div class='flex flex-col gap-3 lg:py-3.25'>
 				<p class={headingClass}>Location &amp; Contact</p>
-				<address class='not-italic text-sm leading-5.25 text-text-secondary py-1'>
+				<address class='not-italic text-sm leading-5.25 text-text-secondary-dark py-1'>
 					{ADDRESS_LINE_1}<br />
 					{ADDRESS_LINE_2}
 				</address>
@@ -78,9 +78,9 @@ const headingClass = 'text-xs leading-5 tracking-[0.6px] font-bold text-white';
 		</div>
 
 		<!-- Copyright -->
-		<div class='pt-12.75 flex flex-col gap-2.5 text-text-secondary'>
+		<div class='pt-12.75 flex flex-col gap-2.5 text-text-secondary-dark'>
 			<p class='text-sm leading-5.25'>© Copyright BSW Heating {today.getFullYear()}</p>
-			<p class='text-[11px] leading-4.5'>
+			<p class='text-[13px] leading-5'>
 				{`BSW Heating Ltd, ${ADDRESS_LINE_1} ${ADDRESS_LINE_2}. Registered in England (${COMPANY_NUMBER}). VAT No: ${VAT_NUMBER}`}
 			</p>
 		</div>

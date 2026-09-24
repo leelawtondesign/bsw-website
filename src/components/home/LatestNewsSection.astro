@@ -39,14 +39,14 @@ const articles = [
 {
 	articles.length > 0 && (
 		<section class='content-wrapper py-15 md:py-17.5'>
-			<div class='text-center flex flex-col gap-3 mb-9.75'>
-				<p class='uppercase-tag text-bsw-orange-text'>Latest</p>
+			<div class='text-center mb-9.75'>
 				<h2 class='text-text-primary'>News</h2>
 			</div>
 
-			<div class='grid grid-cols-12 gap-x-5.5 gap-y-4'>
+			<!-- Swipeable row on phones, grid from md up -->
+			<div class='flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-5 -mx-5 px-5 [scrollbar-width:none] md:grid md:grid-cols-12 md:gap-x-5.5 md:overflow-visible md:mx-0 md:px-0'>
 				{articles.map((article) => (
-					<div class='col-span-12 md:col-span-4'>
+					<div class='snap-start shrink-0 w-4/5 md:w-auto md:col-span-4'>
 						<NewsCard
 							title={article.title}
 							summary={article.summary}

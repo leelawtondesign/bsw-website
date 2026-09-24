@@ -17,8 +17,9 @@ html {
 	--color-primary-600: #DD6508;
 	--color-primary-contrast: #ffffff;
 
-	--color-text-primary: #0E2F42;
-	--color-text-secondary: #739CB7;
+	--color-text-primary: #1D2631;
+	--color-text-secondary: #4F6F86;
+	--color-text-secondary-dark: #739CB7;
 	--color-text-tertiary: #B2CDDF;
 
 	--color-grey-50: #F0F2F4;
@@ -43,6 +44,9 @@ html {
 
 	--shadow-card: 0 7px 20px 0 rgb(0 0 0 / 0.05);
 
+	/* Radius scale: lg (8px) inputs, xl (12px) buttons and small cards, 2xl (20px) sections, images and large cards */
+	--radius-2xl: 1.25rem;
+
 	--background-image-gradient-orange: linear-gradient(128.6deg,
 			rgba(117, 52, 37, 0.99) 9.1%,
 			rgba(204, 66, 24, 0.98) 39.5%,
@@ -50,7 +54,7 @@ html {
 }
 
 @utility text-h1 {
-	@apply text-4xl md:text-5xl leading-[1.167] font-semibold;
+	@apply text-4xl md:text-5xl leading-[1.167] font-bold;
 }
 
 @utility text-h2 {
@@ -75,6 +79,7 @@ html {
 	h6 {
 		@apply font-semibold;
 		margin: 0;
+		text-wrap: balance;
 	}
 
 	h1 {
@@ -113,7 +118,7 @@ html {
 	}
 
 	.card {
-		@apply bg-white rounded-[18px];
+		@apply bg-white rounded-2xl;
 	}
 
 	/* Concave corner that blends a tab cut out of a card/image into the page background */

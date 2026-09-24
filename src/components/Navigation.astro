@@ -1,15 +1,19 @@
 ---
 import { Image } from 'astro:assets';
+import { Phone } from '@lucide/astro';
 import Button from './Button.astro';
 import MenuItems from './MenuItems.astro';
 import BswLogo from '../assets/brand/bsw_logo.svg';
-import { CLIENT_LOGIN_LINK, RESIDENT_LOGIN_LINK } from '../consts';
+import { CLIENT_LOGIN_LINK, PHONE, RESIDENT_LOGIN_LINK } from '../consts';
+
+const phoneHref = `tel:${PHONE.replace(/\s/g, '')}`;
+const loginLinkClass = 'text-sm font-medium tracking-[0.7px] text-text-primary hover:text-bsw-orange-text transition-colors';
 ---
 
 <nav id='siteHeader' class='absolute top-0 inset-x-0 z-50 flex justify-center print:hidden'>
 	<span class='nav-corner nav-corner-left' aria-hidden='true'></span>
 
-	<div class='bg-white rounded-b-[25px] flex items-center gap-10 xl:gap-10.75 px-6 xl:px-7.5 py-3 xl:py-4.75'>
+	<div class='bg-white rounded-b-2xl flex items-center gap-10 xl:gap-10.75 px-6 xl:px-7.5 py-3 xl:py-4.75'>
 		<!-- Logo -->
 		<a href='/' class='flex items-center shrink-0 pb-1.25' aria-label='BSW Heating home'>
 			<Image src={BswLogo} alt='BSW Heating' loading='eager' fetchpriority='high' class='w-23 h-10' />
@@ -20,24 +24,37 @@ import { CLIENT_LOGIN_LINK, RESIDENT_LOGIN_LINK } from '../consts';
 			<MenuItems />
 		</div>
 
-		<!-- Desktop: CTAs -->
-		<div class='hidden xl:flex items-center gap-3.25 shrink-0'>
-			<Button variant='outline' size='sm' href={RESIDENT_LOGIN_LINK}>Resident Log In</Button>
-			<Button variant='outline' size='sm' href={CLIENT_LOGIN_LINK}>Client Log In</Button>
+		<!-- Desktop: logins + call -->
+		<div class='hidden xl:flex items-center gap-5 shrink-0'>
+			<a href={RESIDENT_LOGIN_LINK} class={loginLinkClass}>Resident Log In</a>
+			<a href={CLIENT_LOGIN_LINK} class={loginLinkClass}>Client Log In</a>
+			<Button size='sm' href={phoneHref}>
+				<Phone size={16} stroke-width={2} />
+				{PHONE}
+			</Button>
 		</div>
 
-		<!-- Mobile: hamburger -->
-		<button
-			id='menuOpen'
-			type='button'
-			class='xl:hidden flex items-center justify-center w-10 h-10 text-text-primary cursor-pointer'
-			aria-label='Open menu'
-			aria-controls='mobileMenu'
-			aria-expanded='false'>
-			<svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-				<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'></path>
-			</svg>
-		</button>
+		<!-- Mobile: call + hamburger -->
+		<div class='xl:hidden flex items-center gap-2'>
+			<a
+				href={phoneHref}
+				class='flex items-center justify-center w-10 h-10 rounded-xl bg-bsw-orange text-white hover:bg-bsw-orange-text transition-colors'
+				aria-label={`Call BSW Heating on ${PHONE}`}>
+				<Phone size={20} stroke-width={2} />
+			</a>
+
+			<button
+				id='menuOpen'
+				type='button'
+				class='flex items-center justify-center w-10 h-10 text-text-primary cursor-pointer'
+				aria-label='Open menu'
+				aria-controls='mobileMenu'
+				aria-expanded='false'>
+				<svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+					<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'></path>
+				</svg>
+			</button>
+		</div>
 	</div>
 
 	<span class='nav-corner nav-corner-right' aria-hidden='true'></span>
@@ -62,6 +79,10 @@ import { CLIENT_LOGIN_LINK, RESIDENT_LOGIN_LINK } from '../consts';
 	<div class='flex flex-col items-center justify-center gap-8'>
 		<MenuItems mobile />
 		<div class='flex flex-col items-center gap-3 mt-2'>
+			<Button href={phoneHref}>
+				<Phone size={20} stroke-width={2} />
+				Call {PHONE}
+			</Button>
 			<Button variant='outline' href={RESIDENT_LOGIN_LINK}>Resident Log In</Button>
 			<Button variant='outline' href={CLIENT_LOGIN_LINK}>Client Log In</Button>
 		</div>
