@@ -1,0 +1,19 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/home/HeroSection.astro';
+import AboutSection from '../components/home/AboutSection.astro';
+import ServicesSection from '../components/home/ServicesSection.astro';
+import LatestNewsSection from '../components/home/LatestNewsSection.astro';
+import CustomersSection from '../components/home/CustomersSection.astro';
+import ContactFormSection from '../components/home/ContactFormSection.astro';
+---
+
+<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<HeroSection />
+	<AboutSection />
+	<ServicesSection />
+	<LatestNewsSection />
+	<CustomersSection />
+	<ContactFormSection />
+</Layout>

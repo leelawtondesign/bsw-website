@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import Button from '../Button.astro';
+import HeroImage from '../../assets/home/hero_bg.webp';
+---
+
+<section class='bg-bsw-navy mx-4 rounded-[19px] overflow-hidden relative flex flex-col lg:block lg:min-h-185.25'>
+	<div class='content-wrapper z-10 pt-32 pb-10 md:pt-40 lg:pt-49 lg:pb-30 relative'>
+		<div class='text-white hero-content flex flex-col items-start gap-6.5 max-w-120'>
+			<p class='uppercase-tag text-text-tertiary flex items-center gap-2'>
+				<span class='block w-3.25 border-t border-text-tertiary' aria-hidden='true'></span>
+				Domestic &amp; Commercial Heating Specialists
+			</p>
+
+			<h1>Gas, heating and renewables <span class='text-bsw-orange'>for the South East.</span></h1>
+
+			<p class='text-lg leading-7'>
+				BSW Heating Limited delivers professional servicing, maintenance and installation for housing associations, local
+				authorities, education providers and homeowners.
+			</p>
+
+			<div class='flex flex-wrap items-center gap-5 pt-6.5'>
+				<Button href='/services'>Explore Services</Button>
+				<Button href='#contact-form-section' variant='outline-light'>Contact Us</Button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Background image, faded into the navy panel -->
+	<div
+		class='relative h-64 sm:h-80 md:h-105 -mt-16 lg:mt-0 lg:h-auto lg:absolute lg:-top-7 lg:-bottom-7 lg:left-[8.75%] lg:-right-12 pointer-events-none'>
+		<Image
+			src={HeroImage}
+			alt=''
+			widths={[640, 1280, 1920, 2528]}
+			sizes='(min-width: 1024px) 95vw, 100vw'
+			quality={80}
+			loading='eager'
+			fetchpriority='high'
+			class='hero-image absolute inset-0 w-full h-full object-cover object-[70%_center] lg:object-center'
+		/>
+		<div class='absolute inset-0 bg-linear-to-b lg:hidden from-bsw-navy to-transparent to-60%'></div>
+	</div>
+	<div
+		class='hidden lg:block absolute inset-0 pointer-events-none bg-linear-to-l from-[rgba(38,50,65,0)] from-[21.5%] to-bsw-navy to-[69.5%]'>
+	</div>
+</section>
+

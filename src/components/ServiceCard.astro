@@ -1,0 +1,26 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	href?: string;
+}
+
+const { title, description, href } = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+	href={href}
+	class:list={[
+		'card px-7 py-9.5 flex flex-col items-start gap-4.25 h-full',
+		href && 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1',
+	]}>
+	<div class='inline-flex items-center p-2.5 rounded-xl bg-primary-100 text-bsw-orange-text'>
+		<slot />
+	</div>
+
+	<h3 class='text-text-primary'>{title}</h3>
+
+	<p class='text-text-secondary text-sm leading-5.25'>{description}</p>
+</Tag>

@@ -1,0 +1,86 @@
+---
+import type { ImageMetadata } from 'astro';
+import CustomerCard from '../CustomerCard.astro';
+import Hillingdon from '../../assets/customers/hillingdon.webp';
+import SouthEastConsortium from '../../assets/customers/south_east_consortium.webp';
+import MetropolitanThamesValley from '../../assets/customers/metropolitan_thames_valley.webp';
+import Anchor from '../../assets/customers/anchor.webp';
+import AsterGroup from '../../assets/customers/aster_group.svg';
+
+interface Customer {
+	name: string;
+	logo: ImageMetadata;
+}
+
+const customers: Customer[] = [
+	{ name: 'London Borough of Hillingdon', logo: Hillingdon },
+	{ name: 'South East Consortium', logo: SouthEastConsortium },
+	{ name: 'Metropolitan Thames Valley', logo: MetropolitanThamesValley },
+	{ name: 'Anchor', logo: Anchor },
+	{ name: 'Aster Group', logo: AsterGroup },
+];
+
+// Repeat the logos so a single set always overflows the track
+const minCards = 8;
+const copies = Math.max(1, Math.ceil(minCards / customers.length));
+const row = Array.from({ length: copies }, () => customers).flat();
+
+const cardWidth = 273;
+const duration = Math.round((row.length * cardWidth) / 40);
+---
+
+<section class='bg-light-grey-bg py-15 md:py-21.25'>
+	<div class='content-wrapper text-center flex flex-col gap-3 mb-6.5'>
+		<p class='uppercase-tag text-bsw-orange-text'>Our customers</p>
+		<h2 class='text-text-primary'>Trusted by</h2>
+	</div>
+
+	<div class='content-wrapper'>
+		<div class='marquee-container'>
+			<div class='marquee-row' style={`--duration:${duration}s;`}>
+				{row.map((c) => <CustomerCard name={c.name} logo={c.logo} />)}
+				<span aria-hidden='true' class='contents'>
+					{row.map((c) => <CustomerCard name={c.name} logo={c.logo} />)}
+				</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.marquee-container {
+		overflow: hidden;
+		padding: 22px 0;
+		-webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+		mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+	}
+
+	.marquee-row {
+		display: flex;
+		gap: 21px;
+		width: max-content;
+		will-change: transform;
+		transform: translateZ(0);
+		animation: marquee var(--duration) linear infinite;
+	}
+
+	.marquee-container:hover .marquee-row {
+		animation-play-state: paused;
+	}
+
+	@keyframes marquee {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			/* Half the row plus half a gap keeps the loop seamless */
+			transform: translateX(calc(-50% - 10.5px));
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.marquee-row {
+			animation: none;
+		}
+	}
+</style>

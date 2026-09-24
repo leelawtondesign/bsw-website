@@ -1,0 +1,71 @@
+---
+import { ChevronDown } from '@lucide/astro';
+
+const { mobile = false } = Astro.props;
+
+const items = [
+	{ href: '/about-us', label: 'About Us' },
+	{
+		href: '/services',
+		label: 'Services',
+		children: [
+			{ href: '/services/domestic', label: 'Domestic Maintenance & Installations' },
+			{ href: '/services/commercial', label: 'Commercial Maintenance & Installations' },
+			{ href: '/services/mechanical-electrical', label: 'Mechanical & Electrical Projects' },
+			{ href: '/services/renewables', label: 'Renewable Technologies' },
+		],
+	},
+	{ href: '/help-and-advice', label: 'Help and Advice' },
+	{ href: '/contact', label: 'Contact Us' },
+];
+
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+const base = mobile
+	? 'text-2xl font-medium transition-colors'
+	: 'inline-flex items-center gap-1.5 py-1.5 text-sm font-medium tracking-[0.7px] transition-colors';
+const activeClass = 'text-bsw-orange-text';
+const inactiveClass = 'text-text-primary hover:text-bsw-orange-text';
+---
+
+{
+	items.map((item) =>
+		item.children && !mobile ? (
+			<div class='relative group'>
+				<a
+					href={item.href}
+					aria-current={isActive(item.href) ? 'page' : undefined}
+					aria-haspopup='true'
+					class:list={[base, isActive(item.href) ? activeClass : inactiveClass]}>
+					{item.label}
+					<ChevronDown size={14} stroke-width={1.5} class='transition-transform duration-300 group-hover:rotate-180' />
+				</a>
+				<div class='absolute top-full left-1/2 -translate-x-1/2 pt-5 invisible opacity-0 translate-y-1 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0'>
+					<ul class='bg-white rounded-xl shadow-card border border-grey-100 p-2 w-80'>
+						{item.children.map((child) => (
+							<li>
+								<a
+									href={child.href}
+									aria-current={isActive(child.href) ? 'page' : undefined}
+									class:list={[
+										'block rounded-lg px-4 py-2.5 text-sm transition-colors hover:bg-light-grey-bg',
+										isActive(child.href) ? activeClass : inactiveClass,
+									]}>
+									{child.label}
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		) : (
+			<a
+				href={item.href}
+				aria-current={isActive(item.href) ? 'page' : undefined}
+				class:list={[base, isActive(item.href) ? activeClass : inactiveClass]}>
+				{item.label}
+			</a>
+		),
+	)
+}

@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import Button from './Button.astro';
+import MenuItems from './MenuItems.astro';
+import BswLogo from '../assets/brand/bsw_logo.svg';
+import { CLIENT_LOGIN_LINK, RESIDENT_LOGIN_LINK } from '../consts';
+---
+
+<nav id='siteHeader' class='absolute top-0 inset-x-0 z-50 flex justify-center print:hidden'>
+	<span class='nav-corner nav-corner-left' aria-hidden='true'></span>
+
+	<div class='bg-white rounded-b-[25px] flex items-center gap-10 xl:gap-10.75 px-6 xl:px-7.5 py-3 xl:py-4.75'>
+		<!-- Logo -->
+		<a href='/' class='flex items-center shrink-0 pb-1.25' aria-label='BSW Heating home'>
+			<Image src={BswLogo} alt='BSW Heating' loading='eager' fetchpriority='high' class='w-23 h-10' />
+		</a>
+
+		<!-- Desktop: nav links -->
+		<div class='hidden xl:flex items-center gap-8'>
+			<MenuItems />
+		</div>
+
+		<!-- Desktop: CTAs -->
+		<div class='hidden xl:flex items-center gap-3.25 shrink-0'>
+			<Button variant='outline' size='sm' href={RESIDENT_LOGIN_LINK}>Resident Log In</Button>
+			<Button variant='outline' size='sm' href={CLIENT_LOGIN_LINK}>Client Log In</Button>
+		</div>
+
+		<!-- Mobile: hamburger -->
+		<button
+			id='menuOpen'
+			type='button'
+			class='xl:hidden flex items-center justify-center w-10 h-10 text-text-primary cursor-pointer'
+			aria-label='Open menu'
+			aria-controls='mobileMenu'
+			aria-expanded='false'>
+			<svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+				<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'></path>
+			</svg>
+		</button>
+	</div>
+
+	<span class='nav-corner nav-corner-right' aria-hidden='true'></span>
+</nav>
+
+<!-- Mobile full-screen menu -->
+<div
+	id='mobileMenu'
+	class='fixed inset-0 z-60 bg-white flex flex-col items-center justify-center gap-8
+	       opacity-0 pointer-events-none invisible
+	       transition-all duration-300 xl:hidden'>
+	<!-- Close button -->
+	<button
+		id='menuClose'
+		type='button'
+		class='absolute top-5 right-5 w-10 h-10 flex items-center justify-center text-text-primary cursor-pointer'
+		aria-label='Close menu'>
+		<svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+			<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12'></path>
+		</svg>
+	</button>
+	<div class='flex flex-col items-center justify-center gap-8'>
+		<MenuItems mobile />
+		<div class='flex flex-col items-center gap-3 mt-2'>
+			<Button variant='outline' href={RESIDENT_LOGIN_LINK}>Resident Log In</Button>
+			<Button variant='outline' href={CLIENT_LOGIN_LINK}>Client Log In</Button>
+		</div>
+	</div>
+</div>
+
+<style>
+	/* Inverted corners that blend the nav tab into the page background */
+	.nav-corner {
+		width: 13px;
+		height: 13px;
+		flex-shrink: 0;
+	}
+
+	.nav-corner-left {
+		background: radial-gradient(circle at 0 100%, transparent 12.5px, var(--color-white) 13px);
+	}
+
+	.nav-corner-right {
+		background: radial-gradient(circle at 100% 100%, transparent 12.5px, var(--color-white) 13px);
+	}
+</style>
+
+<script>
+	const menuOpen = document.getElementById('menuOpen')!;
+	const menuClose = document.getElementById('menuClose')!;
+	const menu = document.getElementById('mobileMenu')!;
+
+	function openMenu() {
+		menu.classList.remove('opacity-0', 'pointer-events-none', 'invisible');
+		menu.classList.add('opacity-100');
+		menuOpen.setAttribute('aria-expanded', 'true');
+		document.body.style.overflow = 'hidden';
+		menuClose.focus();
+	}
+
+	function closeMenu() {
+		menu.classList.remove('opacity-100');
+		menu.classList.add('opacity-0', 'pointer-events-none', 'invisible');
+		menuOpen.setAttribute('aria-expanded', 'false');
+		document.body.style.overflow = '';
+	}
+
+	menuOpen.addEventListener('click', openMenu);
+	menuClose.addEventListener('click', closeMenu);
+
+	// Close when any link inside the mobile menu is tapped
+	menu.querySelectorAll('a').forEach((link) => {
+		link.addEventListener('click', closeMenu);
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') closeMenu();
+	});
+</script>

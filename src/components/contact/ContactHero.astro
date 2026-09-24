@@ -1,0 +1,50 @@
+---
+import { Mail, MapPin, Phone } from '@lucide/astro';
+import LinkArrow from '../LinkArrow.astro';
+import { ADDRESS_LINE_1, ADDRESS_LINE_2, EMAIL, OPENING_HOURS, PHONE } from '../../consts';
+
+const methods = [
+	{
+		icon: Mail,
+		title: 'Email',
+		description: "Have a question? Email us and we'll get back to you within 24 hours.",
+		link: { text: EMAIL, href: `mailto:${EMAIL}` },
+	},
+	{
+		icon: Phone,
+		title: 'Call us',
+		description: `Speak with our team. We're available ${OPENING_HOURS}.`,
+		link: { text: PHONE, href: `tel:${PHONE.replace(/\s/g, '')}` },
+	},
+	{
+		icon: MapPin,
+		title: 'Address',
+		description: 'Visit our office',
+		address: `BSW Heating Ltd, ${ADDRESS_LINE_1} ${ADDRESS_LINE_2}`,
+	},
+];
+---
+
+<section class='bg-gradient-orange mx-4 rounded-[19px] overflow-hidden'>
+	<div class='content-wrapper hero-content pt-36 pb-15 lg:pt-42.5 lg:pb-23.25 text-white'>
+		<h1 class='mb-10 lg:mb-14.75'>Contact us</h1>
+
+		<div class='grid grid-cols-1 md:grid-cols-3 gap-y-10 md:gap-x-13'>
+			{
+				methods.map((method) => (
+					<div class='flex flex-col items-start gap-4'>
+						<div class='bg-white/10 rounded-[10px] p-3.5'>
+							<method.icon size={38} stroke-width={1.5} />
+						</div>
+						<div class='flex flex-col gap-2.25'>
+							<h2 class='text-h4'>{method.title}</h2>
+							<p class='text-lg leading-7'>{method.description}</p>
+							{method.address && <address class='not-italic text-lg leading-7 mt-1.75'>{method.address}</address>}
+						</div>
+						{method.link && <LinkArrow text={method.link.text} href={method.link.href} color='white' />}
+					</div>
+				))
+			}
+		</div>
+	</div>
+</section>

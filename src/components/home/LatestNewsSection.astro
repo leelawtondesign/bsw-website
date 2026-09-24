@@ -1,0 +1,63 @@
+---
+import NewsCard from '../NewsCard.astro';
+import Hillingdon from '../../assets/news/hillingdon.webp';
+import NottingHillGenesis from '../../assets/news/notting_hill_genesis.webp';
+import Anchor from '../../assets/news/anchor.webp';
+
+// Temporary content — to be replaced by the news source once it is set up
+const articles = [
+	{
+		title: 'BSW Awarded New Contract with London Borough of Hillingdon',
+		summary:
+			'BSW is pleased to announce that it has been awarded a new contract with the London Borough of Hillingdon for the servicing, maintenance, and installation of commercial heating systems.',
+		articleDate: '2026-06-20',
+		slug: 'bsw-awarded-new-contract-with-london-borough-of-hillingdon',
+		image: Hillingdon,
+		imageAlt: 'London Borough of Hillingdon logo',
+	},
+	{
+		title: 'BSW Awarded New Contract with London Borough of Hillingdon',
+		summary:
+			'BSW is pleased to announce that it has been awarded a new contract with the London Borough of Hillingdon for the servicing, maintenance, and installation of commercial heating systems.',
+		articleDate: '2026-06-20',
+		slug: 'bsw-awarded-new-contract-with-notting-hill-genesis',
+		image: NottingHillGenesis,
+		imageAlt: 'Notting Hill Genesis logo',
+	},
+	{
+		title: 'BSW Awarded New Contract with London Borough of Hillingdon',
+		summary:
+			'BSW is pleased to announce that it has been awarded a new contract with the London Borough of Hillingdon for the servicing, maintenance, and installation of commercial heating systems.',
+		articleDate: '2026-06-20',
+		slug: 'bsw-awarded-new-contract-with-anchor',
+		image: Anchor,
+		imageAlt: 'Anchor logo',
+	},
+];
+---
+
+{
+	articles.length > 0 && (
+		<section class='content-wrapper py-15 md:py-17.5'>
+			<div class='text-center flex flex-col gap-3 mb-9.75'>
+				<p class='uppercase-tag text-bsw-orange-text'>Latest</p>
+				<h2 class='text-text-primary'>News</h2>
+			</div>
+
+			<div class='grid grid-cols-12 gap-x-5.5 gap-y-4'>
+				{articles.map((article) => (
+					<div class='col-span-12 md:col-span-4'>
+						<NewsCard
+							title={article.title}
+							summary={article.summary}
+							articleDate={article.articleDate}
+							image={article.image}
+							imageAlt={article.imageAlt}
+							slug={article.slug}
+						/>
+					</div>
+				))}
+			</div>
+		</section>
+	)
+}

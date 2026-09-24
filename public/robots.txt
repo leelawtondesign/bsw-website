@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Non-indexable / utility routes
+Disallow: /api/

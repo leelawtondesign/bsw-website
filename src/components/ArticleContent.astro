@@ -1,0 +1,65 @@
+---
+// Styles rendered Markdown (news articles, case studies) to match the article body design
+---
+
+<div class='article-content text-text-primary'>
+	<slot />
+</div>
+
+<style>
+	.article-content > :global(* + *) {
+		margin-top: 1.75rem;
+	}
+
+	.article-content :global(p) {
+		font-size: 1.125rem;
+		line-height: 1.75rem;
+	}
+
+	.article-content :global(h2) {
+		font-size: 1.75rem;
+		line-height: 2.25rem;
+		font-weight: 600;
+	}
+
+	.article-content > :global(h2:not(:first-child)) {
+		margin-top: 3.125rem;
+	}
+
+	.article-content > :global(h2 + *),
+	.article-content > :global(p + ul) {
+		margin-top: 1.25rem;
+	}
+
+	.article-content :global(a) {
+		text-decoration: underline;
+	}
+
+	/* Bulleted lists render as orange check lists */
+	.article-content :global(ul) {
+		display: flex;
+		flex-direction: column;
+		gap: 0.625rem;
+		list-style: none;
+		padding: 0;
+	}
+
+	.article-content :global(ul li) {
+		position: relative;
+		padding-left: 1.5rem;
+		line-height: 1.5rem;
+	}
+
+	.article-content :global(ul li)::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.21875rem;
+		width: 1.0625rem;
+		height: 1.0625rem;
+		border-radius: 9999px;
+		background: var(--color-bsw-orange)
+			url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 13 13'%3E%3Cpath fill='white' fill-rule='evenodd' d='M11.12 2.96a.41.41 0 0 1 0 .58L5.16 9.5a.41.41 0 0 1-.57 0L1.88 6.79a.41.41 0 0 1 .57-.58l2.42 2.42 5.67-5.67a.41.41 0 0 1 .58 0Z'/%3E%3C/svg%3E")
+			no-repeat 2px 3px / 13px 13px;
+	}
+</style>

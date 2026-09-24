@@ -1,0 +1,57 @@
+---
+interface Props {
+	id: string;
+	name?: string;
+	type?: 'text' | 'email' | 'tel' | 'url';
+	placeholder?: string;
+	label?: string;
+	value?: string;
+	required?: boolean;
+	autocomplete?: string;
+	rows?: number;
+	class?: string;
+}
+
+const {
+	id,
+	name = id,
+	type = 'text',
+	placeholder,
+	label,
+	value,
+	required = false,
+	autocomplete,
+	rows,
+	class: className = '',
+} = Astro.props;
+---
+
+<div class={`flex flex-col ${className}`}>
+	<div
+		class='flex flex-col flex-1 border border-grey-300 rounded-lg px-3 py-2 focus-within:border-bsw-orange focus-within:ring-2 focus-within:ring-bsw-orange/30 transition-colors bg-white'>
+		{label && <label for={id} class='text-[13px] leading-[1.4] text-grey-400'>{label}</label>}
+		{
+			rows ? (
+				<textarea
+					id={id}
+					name={name}
+					rows={rows}
+					placeholder={placeholder}
+					required={required}
+					autocomplete={autocomplete}
+					class='w-full flex-1 text-sm leading-5 text-text-primary placeholder:text-grey-400 bg-transparent focus:outline-none resize-none min-h-24'>{value}</textarea>
+			) : (
+				<input
+					type={type}
+					id={id}
+					name={name}
+					value={value}
+					placeholder={placeholder}
+					required={required}
+					autocomplete={autocomplete}
+					class='w-full h-5 text-sm leading-5 text-text-primary placeholder:text-grey-400 bg-transparent focus:outline-none'
+				/>
+			)
+		}
+	</div>
+</div>

@@ -1,0 +1,46 @@
+---
+import ServiceCard from '../ServiceCard.astro';
+import { Building, House, SolarPanel, TruckElectric } from '@lucide/astro';
+---
+
+<section class='bg-bsw-navy mx-4 rounded-[18px] overflow-hidden pt-15 pb-15 md:pt-21.25 md:pb-25'>
+	<div class='content-wrapper grid grid-cols-12 gap-5.25'>
+		<div class='col-span-12 text-center text-white flex flex-col gap-3 pb-4.5'>
+			<p class='uppercase-tag'>What we do</p>
+			<h2>Our Services</h2>
+		</div>
+
+		<div class='col-span-12 sm:col-span-6 lg:col-span-3'>
+			<ServiceCard
+				title='Domestic Maintenance & Installations'
+				description='Servicing, repairs and installations for housing associations and residents.'
+				href='/services/domestic'>
+				<House size={31} />
+			</ServiceCard>
+		</div>
+		<div class='col-span-12 sm:col-span-6 lg:col-span-3'>
+			<ServiceCard
+				title='Commercial Maintenance & Installations'
+				description='Planned and reactive maintenance contracts for commercial clients.'
+				href='/services/commercial'>
+				<Building size={31} />
+			</ServiceCard>
+		</div>
+		<div class='col-span-12 sm:col-span-6 lg:col-span-3'>
+			<ServiceCard
+				title='Mechanical & electrical projects'
+				description='Mechanical and electrical project delivery from design through to handover.'
+				href='/services/mechanical-electrical'>
+				<TruckElectric size={31} />
+			</ServiceCard>
+		</div>
+		<div class='col-span-12 sm:col-span-6 lg:col-span-3'>
+			<ServiceCard
+				title='Renewable Technologies'
+				description='Heat pumps and low-carbon heating to support net-zero targets.'
+				href='/services/renewables'>
+				<SolarPanel size={31} />
+			</ServiceCard>
+		</div>
+	</div>
+</section>

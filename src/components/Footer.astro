@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import BswLogo from '../assets/brand/bsw_logo.svg';
+import { ADDRESS_LINE_1, ADDRESS_LINE_2, COMPANY_NUMBER, EMAIL, PHONE, VAT_NUMBER } from '../consts';
+
+const today = new Date();
+
+const resourceLinks = [
+	{ href: '/privacy-and-cookie-policy', label: 'Privacy & Cookie Policy' },
+	{ href: '/gender-pay-gap-report', label: 'Gender Pay Gap Report' },
+	{ href: '/modern-slavery-policy', label: 'Modern Slavery Policy' },
+	{ href: '/complaints-policy', label: 'Complaints Policy' },
+	{ href: '/carbon-reduction-plan', label: 'Carbon Reduction Plan' },
+];
+
+const companyLinks = [
+	{ href: '/news', label: 'News' },
+	{ href: '/help-and-advice', label: 'Help and Advice' },
+	{ href: '/careers', label: 'Careers' },
+	{ href: '/contact', label: 'Contact Us' },
+];
+
+const linkClass = 'text-xs leading-5 tracking-[0.6px] text-text-secondary hover:text-white transition-colors';
+const headingClass = 'text-xs leading-5 tracking-[0.6px] font-bold text-white';
+---
+
+<footer class='bg-bsw-navy mx-4 mb-4 rounded-[18px] py-15 md:py-21.25 print:hidden'>
+	<div class='content-wrapper'>
+		<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-10 pb-11.25 border-b border-text-secondary'>
+			<!-- Logo & tagline -->
+			<div class='flex flex-col gap-8.25'>
+				<a href='/' aria-label='BSW Heating home'>
+					<Image src={BswLogo} alt='BSW Heating' class='w-23 h-10' />
+				</a>
+				<p class='text-sm leading-5.25 text-text-secondary max-w-60'>
+					BSW Heating Limited is a domestic and commercial heating servicing, maintenance and installation company.
+				</p>
+			</div>
+
+			<!-- Location & contact -->
+			<div class='flex flex-col gap-3 lg:py-3.25'>
+				<p class={headingClass}>Location &amp; Contact</p>
+				<address class='not-italic text-sm leading-5.25 text-text-secondary py-1'>
+					{ADDRESS_LINE_1}<br />
+					{ADDRESS_LINE_2}
+				</address>
+				<div><a class={linkClass} href={`tel:${PHONE.replace(/\s/g, '')}`}>{PHONE}</a></div>
+				<div><a class={linkClass} href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+			</div>
+
+			<!-- Resources -->
+			<div class='flex flex-col gap-3 lg:py-3.25'>
+				<p class={headingClass}>Resources</p>
+				{
+					resourceLinks.map((link) => (
+						<div>
+							<a class={linkClass} href={link.href}>
+								{link.label}
+							</a>
+						</div>
+					))
+				}
+			</div>
+
+			<!-- Company -->
+			<div class='flex flex-col gap-3 lg:py-3.25'>
+				<p class={headingClass}>Company</p>
+				{
+					companyLinks.map((link) => (
+						<div>
+							<a class={linkClass} href={link.href}>
+								{link.label}
+							</a>
+						</div>
+					))
+				}
+			</div>
+		</div>
+
+		<!-- Copyright -->
+		<div class='pt-12.75 flex flex-col gap-2.5 text-text-secondary'>
+			<p class='text-sm leading-5.25'>© Copyright BSW Heating {today.getFullYear()}</p>
+			<p class='text-[11px] leading-4.5'>
+				{`BSW Heating Ltd, ${ADDRESS_LINE_1} ${ADDRESS_LINE_2}. Registered in England (${COMPANY_NUMBER}). VAT No: ${VAT_NUMBER}`}
+			</p>
+		</div>
+	</div>
+</footer>

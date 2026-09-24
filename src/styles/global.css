@@ -1,0 +1,193 @@
+@import "tailwindcss";
+
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+html {
+	overflow-x: clip;
+}
+
+@theme {
+	--font-sans: "Inter", sans-serif;
+
+	--color-primary-100: #F5E7D6;
+	--color-primary-500: #F78222;
+	--color-primary-600: #DD6508;
+	--color-primary-contrast: #ffffff;
+
+	--color-text-primary: #0E2F42;
+	--color-text-secondary: #739CB7;
+	--color-text-tertiary: #B2CDDF;
+
+	--color-grey-50: #F0F2F4;
+	--color-grey-100: #E1E5EA;
+	--color-grey-200: #C7D1DB;
+	--color-grey-300: #CBD5E1;
+	--color-grey-400: #7A838D;
+	--color-grey-500: #59789B;
+	--color-grey-900: #1D2631;
+
+	--color-black: #000000;
+	--color-white: #ffffff;
+
+	--color-bsw-orange: #F78222;
+	--color-bsw-orange-text: #DD6508;
+	--color-bsw-red: #F50000;
+	--color-bsw-blue: #0283CA;
+	--color-bsw-navy: #1D2631;
+
+	--color-light-grey-bg: #F5F6F8;
+
+	--shadow-card: 0 7px 20px 0 rgb(0 0 0 / 0.05);
+
+	--background-image-gradient-orange: linear-gradient(128.6deg,
+			rgba(117, 52, 37, 0.99) 9.1%,
+			rgba(204, 66, 24, 0.98) 39.5%,
+			rgba(253, 187, 45, 0.9) 107.2%);
+}
+
+@utility text-h1 {
+	@apply text-4xl md:text-5xl leading-[1.167] font-semibold;
+}
+
+@utility text-h2 {
+	@apply text-3xl md:text-4xl leading-[1.333] font-bold;
+}
+
+@utility text-h3 {
+	@apply text-xl leading-[1.4] font-semibold;
+}
+
+@utility text-h4 {
+	@apply text-2xl md:text-[1.75rem] leading-9 font-semibold;
+}
+
+@layer base {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-semibold;
+		margin: 0;
+	}
+
+	h1 {
+		@apply text-h1;
+	}
+
+	h2 {
+		@apply text-h2;
+	}
+
+	h3 {
+		@apply text-h3;
+	}
+
+	a {
+		@apply text-bsw-orange-text no-underline hover:text-bsw-orange
+	}
+
+	p {
+		@apply font-normal;
+	}
+
+}
+
+@layer utilities {
+	.content-wrapper {
+		@apply max-w-287.5 mx-auto px-5 md:px-10 w-full;
+	}
+
+	.article-wrapper {
+		@apply max-w-240 mx-auto px-5 md:px-10 w-full;
+	}
+
+	.uppercase-tag {
+		@apply uppercase text-sm font-medium tracking-[0.98px];
+	}
+
+	.card {
+		@apply bg-white rounded-[18px];
+	}
+
+	/* Concave corner that blends a tab cut out of a card/image into the page background */
+	.inverted-corner {
+		@apply size-4.5 shrink-0;
+		background: radial-gradient(circle at 100% 100%, transparent 17.5px, var(--color-white) 18px);
+	}
+}
+
+
+/* Hero entrance animations */
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.hero-content > * {
+	animation: fadeUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.hero-content > *:nth-child(1) {
+	animation-delay: 0.1s;
+}
+.hero-content > *:nth-child(2) {
+	animation-delay: 0.2s;
+}
+.hero-content > *:nth-child(3) {
+	animation-delay: 0.3s;
+}
+.hero-content > *:nth-child(4) {
+	animation-delay: 0.4s;
+}
+
+.hero-image {
+	animation: fadeIn 0.8s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hero-content > *,
+	.hero-image {
+		animation: none;
+	}
+}
+
+body {
+	font-family: var(--font-sans);
+	background-color: var(--color-white);
+	text-align: left;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	font-size: 16px;
+	font-weight: 400;
+	color: var(--color-text-primary);
+}
+
+strong,
+b {
+	font-weight: 700;
+}
+
+.grecaptcha-badge {
+	display: none !important;
+}

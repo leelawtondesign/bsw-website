@@ -1,0 +1,42 @@
+---
+export const prerender = true;
+
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ArticleHero from '../../components/ArticleHero.astro';
+import ArticleContent from '../../components/ArticleContent.astro';
+
+export async function getStaticPaths() {
+	const articles = await getCollection('news');
+	return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const { title, summary, articleDate, image, imageAlt } = article.data;
+const { Content } = await render(article);
+
+const formattedDate = articleDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+---
+
+<Layout title={`${title} — BSW Heating`} description={summary}>
+	<ArticleHero tag={`Posted ${formattedDate}`} title={title} summary={summary} />
+
+	<article class='article-wrapper pt-15 pb-20 md:pb-25 flex flex-col gap-12.5'>
+		<ArticleContent>
+			<Content />
+		</ArticleContent>
+
+		{
+			image && (
+				<Image
+					src={image}
+					alt={imageAlt}
+					widths={[342, 684]}
+					sizes='342px'
+					class='w-full max-w-85.5 aspect-342/204 object-cover rounded-[10px]'
+				/>
+			)
+		}
+	</article>
+</Layout>

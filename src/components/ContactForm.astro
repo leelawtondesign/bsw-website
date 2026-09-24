@@ -1,0 +1,119 @@
+---
+import Button from './Button.astro';
+import TextInput from './TextInput.astro';
+import { PUBLIC_RECAPTCHA_SITE_KEY } from '../consts';
+
+interface Props {
+	variant?: 'dark' | 'light';
+}
+
+const { variant = 'dark' } = Astro.props;
+
+const linkClass = variant === 'dark' ? 'text-bsw-orange hover:text-white' : 'text-bsw-orange-text hover:text-text-primary';
+---
+
+<div
+	id='form-container'
+	data-variant={variant}
+	class:list={[
+		'border border-grey-100 rounded-2xl px-6 py-10 md:px-10',
+		variant === 'dark' ? 'bg-bsw-navy md:py-15' : 'bg-light-grey-bg md:py-10.75',
+	]}>
+	<form id='contact-form' class='grid grid-cols-6 gap-x-2.5 gap-y-3.5'>
+		<TextInput id='first_name' label='First name' autocomplete='given-name' required class='col-span-6 sm:col-span-3' />
+		<TextInput id='surname' label='Surname' autocomplete='family-name' required class='col-span-6 sm:col-span-3' />
+		<TextInput id='email' type='email' label='Email' autocomplete='email' required class='col-span-6 sm:col-span-3' />
+		<TextInput id='phone' type='tel' label='Contact number' autocomplete='tel' class='col-span-6 sm:col-span-3' />
+		<TextInput id='message' label='Message' rows={4} required class='col-span-6 h-32.5' />
+
+		<p class='col-span-6 py-1.5 text-[11px] leading-4.5 text-text-secondary'>
+			This site is protected by reCAPTCHA and the Google{' '}
+			<a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer' class={linkClass}
+				>Privacy Policy</a
+			>{' '}
+			and{' '}
+			<a href='https://policies.google.com/terms' target='_blank' rel='noopener noreferrer' class={linkClass}
+				>Terms of Service</a
+			>{' '}
+			apply.
+		</p>
+
+		<p
+			id='form-error'
+			class:list={[
+				'col-span-6 sm:col-span-3 self-center text-sm hidden',
+				variant === 'dark' ? 'text-bsw-orange' : 'text-bsw-orange-text',
+			]}
+			role='alert'>
+			Something went wrong. Please try again.
+		</p>
+
+		<div class='col-span-6 sm:col-start-4 sm:col-span-3'>
+			<Button type='submit' fullWidth>Send enquiry</Button>
+		</div>
+	</form>
+</div>
+
+<script define:vars={{ PUBLIC_RECAPTCHA_SITE_KEY }}>
+	const form = document.getElementById('contact-form');
+	const container = document.getElementById('form-container');
+	const error = document.getElementById('form-error');
+	const submitBtn = form?.querySelector('button[type="submit"]');
+
+	form?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+
+		if (submitBtn) {
+			submitBtn.disabled = true;
+			submitBtn.textContent = 'Sending...';
+		}
+		error?.classList.add('hidden');
+
+		let recaptchaToken = '';
+		if (PUBLIC_RECAPTCHA_SITE_KEY && window.grecaptcha) {
+			try {
+				// Wait for the Enterprise runtime to be fully ready before executing,
+				// otherwise a token generated too early can be rejected as invalid.
+				await new Promise((resolve) => window.grecaptcha.enterprise.ready(resolve));
+				recaptchaToken = await window.grecaptcha.enterprise.execute(PUBLIC_RECAPTCHA_SITE_KEY, {
+					action: 'contact_form',
+				});
+			} catch {
+				// reCAPTCHA unavailable — proceed without token; server will reject if key is set
+			}
+		}
+
+		const formData = new FormData(form);
+		formData.append('recaptcha_token', recaptchaToken);
+
+		try {
+			const response = await fetch('/api/send-email', { method: 'POST', body: formData });
+
+			if (response.ok) {
+				if (container) {
+					const isDark = container.dataset.variant === 'dark';
+					container.innerHTML = `
+						<div class="py-16 text-center ${isDark ? 'text-white' : 'text-text-primary'}" role="status">
+							<div class="mb-4 inline-flex items-center justify-center w-16 h-16 bg-primary-100 text-bsw-orange-text rounded-full">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+								</svg>
+							</div>
+							<p class="mb-2 text-h3">Message Sent!</p>
+							<p class="${isDark ? 'text-text-tertiary' : 'text-text-secondary'}">Thanks for reaching out. We'll be in touch shortly.</p>
+							<button onclick="window.location.reload()" class="mt-6 text-sm underline cursor-pointer ${isDark ? 'text-text-tertiary' : 'text-text-secondary'}">Send another message</button>
+						</div>
+					`;
+				}
+			} else {
+				throw new Error('Failed to send');
+			}
+		} catch {
+			error?.classList.remove('hidden');
+			if (submitBtn) {
+				submitBtn.disabled = false;
+				submitBtn.textContent = 'Send enquiry';
+			}
+		}
+	});
+</script>

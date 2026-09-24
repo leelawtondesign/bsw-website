@@ -1,0 +1,32 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import LinkArrow from './LinkArrow.astro';
+
+interface Props {
+	client: string;
+	location: string;
+	summary: string;
+	logo: ImageMetadata;
+	logoAlt: string;
+	href?: string;
+}
+
+const { client, location, summary, logo, logoAlt, href } = Astro.props;
+---
+
+<div class='bg-light-grey-bg rounded-[18px] px-7 py-10 flex flex-col items-start gap-4 h-full'>
+	<Image src={logo} alt={logoAlt} height={82} class='h-10.25 w-auto' />
+
+	<div class='flex flex-col gap-1'>
+		<h3 class='text-text-primary'>{client}</h3>
+		<p class='text-text-secondary text-sm leading-5.25'>{location}</p>
+	</div>
+
+	<hr class='w-full border-grey-100' />
+
+	<div class='flex flex-col items-start gap-2.5 flex-1'>
+		<p class='text-text-primary text-sm leading-5.25'>{summary}</p>
+		{href && <LinkArrow text='Read full case study' ariaLabel={`Read the ${client} case study`} href={href} class='mt-auto' />}
+	</div>
+</div>

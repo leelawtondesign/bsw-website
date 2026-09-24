@@ -1,0 +1,19 @@
+---
+import ContactForm from '../ContactForm.astro';
+---
+
+<section class='content-wrapper py-15 md:py-17.5 scroll-m-10' id='contact-form-section'>
+	<div class='grid grid-cols-12 gap-y-10 md:gap-x-6.5 items-start'>
+		<!-- Left: intro -->
+		<div class='col-span-12 md:col-span-6 flex flex-col items-start gap-3'>
+			<p class='uppercase-tag text-bsw-orange-text'>Get in touch</p>
+			<h2 class='text-text-primary'>Any questions? Just ask</h2>
+			<p class='text-text-primary max-w-114'>Fill out the form and one of our team will be in touch shortly.</p>
+		</div>
+
+		<!-- Right: form card -->
+		<div class='col-span-12 md:col-span-6'>
+			<ContactForm />
+		</div>
+	</div>
+</section>

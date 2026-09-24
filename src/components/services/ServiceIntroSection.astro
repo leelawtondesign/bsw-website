@@ -1,0 +1,62 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Reason {
+	title: string;
+	description: string;
+}
+
+interface Props {
+	tag: string;
+	heading: string;
+	intro: string;
+	image: ImageMetadata;
+	imageAlt: string;
+	reasons: Reason[];
+	headingClass?: string;
+}
+
+const { tag, heading, intro, image, imageAlt, reasons, headingClass = '' } = Astro.props;
+---
+
+<section class='content-wrapper py-15 md:py-25'>
+	<div class='grid grid-cols-12 gap-y-10 md:gap-x-10 lg:gap-x-16.25 items-start'>
+		<!-- Left: image -->
+		<div class='col-span-12 md:col-span-6 rounded-[28px] overflow-hidden aspect-503/541'>
+			<Image
+				src={image}
+				alt={imageAlt}
+				widths={[520, 1040]}
+				sizes='(min-width: 768px) 504px, 100vw'
+				quality={80}
+				class='w-full h-full object-cover'
+			/>
+		</div>
+
+		<!-- Right: copy + reasons -->
+		<div class='col-span-12 md:col-span-6 flex flex-col gap-8.75'>
+			<div class='flex flex-col items-start gap-5.5'>
+				<p class='uppercase-tag text-bsw-orange-text'>{tag}</p>
+				<h2 class:list={['text-text-primary', headingClass]}>{heading}</h2>
+				<p class='text-text-primary'>{intro}</p>
+			</div>
+
+			<ul class='grid grid-cols-1 sm:grid-cols-2 sm:gap-x-6.5'>
+				{
+					reasons.map((reason, index) => (
+						<li
+							class:list={[
+								'flex flex-col gap-1.75 py-7.5 border-b border-grey-100',
+								index === 0 && 'border-t',
+								index === 1 && 'sm:border-t',
+							]}>
+							<h3 class='text-text-primary'>{reason.title}</h3>
+							<p class='text-text-secondary text-sm leading-5.25'>{reason.description}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ImageTextSection from '../../components/ImageTextSection.astro';
+import StatsSection from '../../components/about-us/StatsSection.astro';
+import ValuesSection from '../../components/about-us/ValuesSection.astro';
+import TeamSection from '../../components/about-us/TeamSection.astro';
+import ContactFormSection from '../../components/home/ContactFormSection.astro';
+import AboutHero from '../../assets/about-us/about_hero.webp';
+import TeamPhoto from '../../assets/about-us/team_photo.webp';
+import CustomerService from '../../assets/about-us/customer_service.webp';
+---
+
+<Layout
+	title='About Us — BSW Heating'
+	description='BSW Heating is a family owned and run heating servicing, maintenance and installation company trusted by organisations across the South East.'>
+	<PageHero title='About Us' subtitle='Lorem ipsum dolor sit amet consectetur. Consectetur.' image={AboutHero} />
+
+	<ImageTextSection
+		tag='Long-Term Partnerships'
+		heading='Keeping Homes and Buildings Running Efficiently'
+		image={TeamPhoto}
+		imageAlt='The BSW Heating team outside the Kenley head office'>
+		<p>
+			From large-scale installations to ongoing maintenance and repairs, our Gas Safe engineers and dedicated operations
+			team deliver responsive heating solutions trusted by organisations across the South East.
+		</p>
+	</ImageTextSection>
+
+	<StatsSection />
+	<ValuesSection />
+
+	<ImageTextSection
+		tag='Customer Service Team'
+		heading='Here to help, every step of the way'
+		image={CustomerService}
+		imageAlt='BSW customer service team members at their desks'
+		imagePosition='right'
+		class='pt-5 pb-15 md:pt-6.25 md:pb-25'>
+		<p>
+			Our in-house customer service team handles enquiries, scheduling and support for residents and clients across
+			every contract, making sure every call and repair request is handled promptly and professionally.
+		</p>
+	</ImageTextSection>
+
+	<TeamSection />
+	<ContactFormSection />
+</Layout>

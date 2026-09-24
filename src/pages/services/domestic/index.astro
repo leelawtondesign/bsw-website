@@ -1,0 +1,47 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import ServiceIntroSection from '../../../components/services/ServiceIntroSection.astro';
+import ContractWinsSection from '../../../components/services/ContractWinsSection.astro';
+import ContactFormSection from '../../../components/home/ContactFormSection.astro';
+import ServiceImage from '../../../assets/services/domestic.webp';
+
+const reasons = [
+	{
+		title: 'Boiler Servicing & Repairs',
+		description: 'Keeping heating systems safe, efficient and reliable with expert servicing and maintenance.',
+	},
+	{
+		title: 'Heating System Installations',
+		description: 'Professional installation of gas, electric and renewable heating systems for every home.',
+	},
+	{
+		title: 'Year-Round Emergency Support',
+		description: 'Gas Safe engineers providing fast emergency response alongside planned maintenance visits.',
+	},
+	{
+		title: 'Trusted Housing Partners',
+		description: 'Supporting over 50,000 homes for local authorities, housing associations and homeowners.',
+	},
+];
+---
+
+<Layout
+	title='Domestic Maintenance & Installations — BSW Heating'
+	description='Domestic boiler servicing, repairs and heating installations for housing associations, local authorities and homeowners across the South East.'>
+	<PageHero
+		title='Domestic Maintenance & Installations'
+		subtitle='Lorem ipsum dolor sit amet consectetur. Consectetur.'
+	/>
+	<ServiceIntroSection
+		tag='Domestic Heating Services'
+		heading='Keeping Homes Warm, All Year'
+		headingClass='max-w-88'
+		intro='From annual boiler servicing to full heating system installations, our experienced team delivers reliable domestic heating services for homes across the region.'
+		image={ServiceImage}
+		imageAlt='BSW engineer standing beside a BSW van'
+		reasons={reasons}
+	/>
+	<ContractWinsSection />
+	<ContactFormSection />
+</Layout>

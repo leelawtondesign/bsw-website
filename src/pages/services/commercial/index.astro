@@ -1,0 +1,46 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PageHero from '../../../components/PageHero.astro';
+import ServiceIntroSection from '../../../components/services/ServiceIntroSection.astro';
+import ContractWinsSection from '../../../components/services/ContractWinsSection.astro';
+import ContactFormSection from '../../../components/home/ContactFormSection.astro';
+import ServiceImage from '../../../assets/services/commercial.webp';
+
+const reasons = [
+	{
+		title: 'Emergency Support',
+		description: 'Rapid reactive support to minimise downtime and keep commercial heating systems operating safely.',
+	},
+	{
+		title: 'Planned Maintenance',
+		description: 'Regular servicing programmes designed to improve efficiency, reliability and equipment lifespan.',
+	},
+	{
+		title: 'Commercial Installations',
+		description: 'Expert delivery of plant rooms, boilers and district heating projects of every size.',
+	},
+	{
+		title: 'Trusted Partners',
+		description: 'Expert delivery of plant rooms, boilers and district heating projects of every size.',
+	},
+];
+---
+
+<Layout
+	title='Commercial Maintenance & Installations — BSW Heating'
+	description='Planned and reactive commercial heating maintenance, servicing and installations across the South East.'>
+	<PageHero
+		title='Commercial Maintenance & Installations'
+		subtitle='Lorem ipsum dolor sit amet consectetur. Consectetur.'
+	/>
+	<ServiceIntroSection
+		tag='Commercial Heating Services'
+		heading='Reliable Commercial Heating, 24/7'
+		intro='From reactive maintenance and planned servicing to complex commercial installations, our experienced team delivers reliable heating solutions across the Southeast.'
+		image={ServiceImage}
+		imageAlt='BSW engineer servicing commercial boilers in a plant room'
+		reasons={reasons}
+	/>
+	<ContractWinsSection />
+	<ContactFormSection />
+</Layout>

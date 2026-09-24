@@ -1,0 +1,18 @@
+---
+interface Props {
+	tag: string;
+	title: string;
+	summary?: string;
+}
+
+const { tag, title, summary } = Astro.props;
+---
+
+<section class='bg-light-grey-bg mx-4 rounded-[19px] overflow-hidden'>
+	<div class='content-wrapper hero-content flex flex-col items-center text-center pt-36 pb-15 lg:pt-45.75 lg:pb-24.25'>
+		<p class='uppercase-tag text-bsw-orange-text mb-5'>{tag}</p>
+		<h1 class='text-text-primary max-w-176.5'>{title}</h1>
+		{summary && <p class='text-lg leading-7 text-text-primary max-w-136.5 mt-3'>{summary}</p>}
+		<slot />
+	</div>
+</section>

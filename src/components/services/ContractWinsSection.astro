@@ -1,0 +1,62 @@
+---
+import ContractCard from '../ContractCard.astro';
+import Stonewater from '../../assets/contracts/stonewater.webp';
+import Islington from '../../assets/contracts/islington.webp';
+import Hillingdon from '../../assets/contracts/hillingdon.webp';
+import LondonFireBrigade from '../../assets/contracts/london_fire_brigade.svg';
+
+// Temporary content — to be replaced with the real case studies
+const summary =
+	'Lorem ipsum dolor sit amet consectetur. Ullamcorper suscipit euismod vitae sem facilisi massa purus. Curabitur id nec placerat integer eleifend ac.';
+
+const contracts = [
+	{ client: 'Islington Council', location: 'South', logo: Stonewater, logoAlt: 'Stonewater logo', slug: 'stonewater' },
+	{ client: 'Islington Council', location: 'Islington', logo: Islington, logoAlt: 'Islington Council logo', slug: 'islington-council' },
+	{
+		client: 'Hillingdon Borough Council',
+		location: 'London Borough of Hillingdon',
+		logo: Hillingdon,
+		logoAlt: 'London Borough of Hillingdon logo',
+		slug: 'hillingdon-borough-council',
+	},
+	{
+		client: 'Euston Fire Station',
+		location: 'London',
+		logo: LondonFireBrigade,
+		logoAlt: 'London Fire Brigade logo',
+		slug: 'euston-fire-station',
+	},
+	{ client: 'Islington Council', location: 'Islington', logo: Islington, logoAlt: 'Islington Council logo', slug: 'islington-council' },
+	{
+		client: 'Hillingdon Borough Council',
+		location: 'London Borough of Hillingdon',
+		logo: Hillingdon,
+		logoAlt: 'London Borough of Hillingdon logo',
+		slug: 'hillingdon-borough-council',
+	},
+];
+---
+
+<section class='content-wrapper pb-5'>
+	<div class='text-center flex flex-col gap-3 mb-9.75'>
+		<p class='uppercase-tag text-bsw-orange-text'>Recent examples</p>
+		<h2 class='text-text-primary'>Contract Wins</h2>
+	</div>
+
+	<div class='grid grid-cols-12 gap-y-7.5 md:gap-x-7.5'>
+		{
+			contracts.map((contract) => (
+				<div class='col-span-12 md:col-span-6 lg:col-span-4'>
+					<ContractCard
+						client={contract.client}
+						location={contract.location}
+						summary={summary}
+						logo={contract.logo}
+						logoAlt={contract.logoAlt}
+						href={`/case-studies/${contract.slug}`}
+					/>
+				</div>
+			))
+		}
+	</div>
+</section>

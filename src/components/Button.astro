@@ -1,0 +1,47 @@
+---
+interface Props {
+	variant?: 'primary' | 'outline' | 'outline-light';
+	size?: 'sm' | 'md';
+	id?: string;
+	fullWidth?: boolean;
+	href?: string;
+	target?: string;
+	type?: 'button' | 'submit' | 'reset';
+	class?: string;
+}
+
+const {
+	variant = 'primary',
+	size = 'md',
+	id,
+	fullWidth,
+	href,
+	target,
+	type = 'button',
+	class: className = '',
+} = Astro.props;
+
+const variantMap = {
+	primary: 'bg-bsw-orange border-bsw-orange text-white hover:bg-bsw-orange-text hover:border-bsw-orange-text hover:text-white',
+	outline: 'border-bsw-orange text-bsw-orange-text hover:bg-bsw-orange hover:text-white',
+	'outline-light': 'border-white text-white hover:bg-white hover:text-bsw-navy',
+};
+
+const base = `inline-flex items-center justify-center border rounded-[11px] font-semibold leading-[1.4] text-center whitespace-nowrap transition-colors duration-300 cursor-pointer
+	${size === 'md' ? 'px-8.5 py-3.5 text-base' : 'px-8.5 py-1.75 text-sm'}
+	${fullWidth ? 'w-full' : ''}
+	${variantMap[variant]}
+	${className}`;
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+	id={id}
+	href={href}
+	target={href ? target : undefined}
+	rel={href && target === '_blank' ? 'noopener' : undefined}
+	type={!href ? type : undefined}
+	class={base}>
+	<slot />
+</Tag>

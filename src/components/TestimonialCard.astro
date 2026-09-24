@@ -1,0 +1,25 @@
+---
+import { Star } from '@lucide/astro';
+
+interface Props {
+	quote: string;
+	name: string;
+	role?: string;
+	rating?: number;
+}
+
+const { quote, name, role, rating = 5 } = Astro.props;
+---
+
+<figure class='bg-light-grey-bg rounded-[20px] px-6 py-10 md:px-9 md:py-12.75 flex flex-col items-start gap-6.75'>
+	<div class='inline-flex items-center gap-1 bg-grey-100 rounded-full px-3.75 py-2.5' role='img' aria-label={`Rated ${rating} out of 5`}>
+		{Array.from({ length: rating }, () => <Star size={15} class='fill-bsw-navy text-bsw-navy' stroke-width={1} />)}
+	</div>
+
+	<blockquote class='text-lg md:text-xl leading-8 md:leading-9.25 text-text-primary'>“{quote}”</blockquote>
+
+	<figcaption class='flex flex-col gap-1.5'>
+		<span class='font-semibold leading-5.5 text-text-primary'>{name}</span>
+		{role && <span class='text-xs font-medium leading-4 text-text-secondary'>{role}</span>}
+	</figcaption>
+</figure>

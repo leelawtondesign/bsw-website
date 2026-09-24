@@ -1,0 +1,61 @@
+---
+export const prerender = true;
+
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ArticleHero from '../../components/ArticleHero.astro';
+import ArticleContent from '../../components/ArticleContent.astro';
+import TestimonialCard from '../../components/TestimonialCard.astro';
+
+export async function getStaticPaths() {
+	const caseStudies = await getCollection('caseStudies');
+	return caseStudies.map((caseStudy) => ({ params: { slug: caseStudy.id }, props: { caseStudy } }));
+}
+
+const { caseStudy } = Astro.props;
+const { title, summary, client, location, value, logo, logoAlt, testimonial } = caseStudy.data;
+const { Content } = await render(caseStudy);
+
+const details = [
+	{ label: 'Client', value: client },
+	{ label: 'Location', value: location },
+	...(value ? [{ label: 'Value', value }] : []),
+];
+---
+
+<Layout title={`${title} — BSW Heating`} description={summary}>
+	<ArticleHero tag={`Case Study · ${location}`} title={title} summary={summary}>
+		<dl class='grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5.25 w-full max-w-199.5 mt-9.5 text-left'>
+			{
+				details.map((detail) => (
+					<div class='bg-bsw-navy rounded-[20px] px-6.5 py-5 flex flex-col gap-1.5'>
+						<dt class='uppercase-tag text-text-secondary'>{detail.label}</dt>
+						<dd class='font-semibold leading-5.5 text-white'>{detail.value}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</ArticleHero>
+
+	<article class='article-wrapper pt-15 pb-20 md:pb-25 flex flex-col gap-10'>
+		{logo && <Image src={logo} alt={logoAlt} height={114} class='h-14.25 w-auto self-start' />}
+
+		<ArticleContent>
+			<Content />
+		</ArticleContent>
+
+		{
+			testimonial && (
+				<div class='mt-2.5'>
+					<TestimonialCard
+						quote={testimonial.quote}
+						name={testimonial.name}
+						role={testimonial.role}
+						rating={testimonial.rating}
+					/>
+				</div>
+			)
+		}
+	</article>
+</Layout>
