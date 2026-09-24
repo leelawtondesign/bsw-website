@@ -2,12 +2,12 @@
 
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import node from '@astrojs/node';
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
 	site: 'https://bsw-website.netlify.app/',
-	output: 'server',
-	adapter: node({ mode: 'standalone' }),
+	output: 'static',
+	adapter: netlify(),
 	image: {
 		service: { entrypoint: 'astro/assets/services/sharp' },
 	},
