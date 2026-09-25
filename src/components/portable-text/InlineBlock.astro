@@ -1,0 +1,10 @@
+---
+import type { Block, Props as PortableTextProps } from 'astro-portabletext/types';
+
+// Renders a block without its <p> so it can sit inside a heading. Each new block starts on a new line.
+type Props = PortableTextProps<Block>;
+
+const { index } = Astro.props;
+---
+
+{index > 0 && <br />}<slot />

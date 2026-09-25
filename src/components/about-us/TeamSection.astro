@@ -1,36 +1,45 @@
 ---
 import TeamCard from '../TeamCard.astro';
-import MichaelBelliere from '../../assets/about-us/michael_belliere.webp';
-import GuyBelliere from '../../assets/about-us/guy_belliere.webp';
-import MattBelliere from '../../assets/about-us/matt_belliere.webp';
-import OllyDracup from '../../assets/about-us/olly_dracup.webp';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
 
-const team = [
-	{ name: 'Michael Belliere', role: 'Executive Chairman', image: MichaelBelliere },
-	{ name: 'Guy Belliere', role: 'Managing Director', image: GuyBelliere },
-	{ name: 'Matt Belliere', role: 'Operations Director', image: MattBelliere },
-	{ name: 'Olly Dracup', role: 'Business Development Director', image: OllyDracup },
-];
+interface Props {
+	heading?: string;
+	text?: string;
+}
+
+const { heading = 'Executive Board', text } = Astro.props;
+
+interface TeamMember {
+	name: string;
+	role: string;
+	photo: SanityImage;
+}
+
+const { data } = await loadQuery<TeamMember[]>({
+	query: `*[_type == "teamMember" && defined(photo.asset)] | order(orderRank) { name, role, photo${IMAGE} }`,
+});
+
+const team = data ?? [];
 ---
 
+{team.length > 0 && (
 <section class='bg-light-grey-bg mx-4 rounded-2xl py-15 md:py-20'>
 	<div class='content-wrapper'>
 		<div class='text-center flex flex-col gap-3 max-w-158.5 mx-auto mb-9.75'>
-			<h2 class='text-text-primary'>Executive Board</h2>
-			<p class='text-lg leading-7 text-text-secondary'>
-				We are a family owned and run business with no external shareholders. This allows decisions to be made quickly,
-				enabling us to invest and grow.
-			</p>
+			<h2 class='text-text-primary'>{heading}</h2>
+			{text && <p class='text-lg leading-7 text-text-secondary'>{text}</p>}
 		</div>
 
 		<div class='grid grid-cols-12 gap-3.75'>
 			{
 				team.map((member) => (
 					<div class='col-span-12 sm:col-span-6 lg:col-span-3'>
-						<TeamCard name={member.name} role={member.role} image={member.image} />
+						<TeamCard name={member.name} role={member.role} image={member.photo} />
 					</div>
 				))
 			}
 		</div>
 	</div>
 </section>
+)}

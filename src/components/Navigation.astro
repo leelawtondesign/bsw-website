@@ -4,9 +4,13 @@ import { Phone } from '@lucide/astro';
 import Button from './Button.astro';
 import MenuItems from './MenuItems.astro';
 import BswLogo from '../assets/brand/bsw_logo.svg';
-import { CLIENT_LOGIN_LINK, PHONE, RESIDENT_LOGIN_LINK } from '../consts';
+import { getSiteSettings, telHref } from '../sanity/lib/globals';
 
-const phoneHref = `tel:${PHONE.replace(/\s/g, '')}`;
+const settings = await getSiteSettings();
+const PHONE = settings.phone ?? '';
+const RESIDENT_LOGIN_LINK = settings.residentLoginLink || '#';
+const CLIENT_LOGIN_LINK = settings.clientLoginLink || '#';
+const phoneHref = telHref(PHONE);
 const loginLinkClass = 'text-sm font-medium tracking-[0.7px] text-text-primary hover:text-bsw-orange-text transition-colors';
 ---
 

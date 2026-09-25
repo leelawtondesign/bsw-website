@@ -3,17 +3,40 @@ import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 import StepsSection from '../../components/help-and-advice/StepsSection.astro';
 import StillNoHeatingSection from '../../components/help-and-advice/StillNoHeatingSection.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
+import type { PageHero as Hero, Seo } from '../../sanity/lib/types';
+
+interface HelpAndAdvicePage {
+	hero?: Hero;
+	stepsHeading?: string;
+	steps?: { _key: string; title: string; description?: string; image?: SanityImage }[];
+	winterAdvice?: { heading?: string; text?: string; videoUrl?: string };
+	stillNoHeating?: { heading?: string; text?: string };
+	seo?: Seo;
+}
+
+const { data: page } = await loadQuery<HelpAndAdvicePage>({
+	query: `*[_id == "helpAndAdvicePage"][0]{
+		...,
+		hero{ ..., image${IMAGE} },
+		steps[]{ ..., image${IMAGE} },
+		seo{ ..., ogImage${IMAGE} }
+	}`,
+});
 ---
 
 <Layout
-	title='Help and Advice — BSW Heating'
-	description='No heating or hot water? Try these simple checks on your boiler before calling the BSW Heating team.'>
+	title={page?.seo?.metaTitle ?? 'Help and Advice'}
+	description={page?.seo?.metaDescription}
+	image={page?.seo?.ogImage?.url}>
 	<PageHero
-		title='No heating or hot water?'
-		subtitle='Lorem ipsum dolor sit amet consectetur. Consectetur.'
+		title={page?.hero?.title ?? 'Help and Advice'}
+		subtitle={page?.hero?.subtitle}
+		image={page?.hero?.image}
 		variant='orange'
 		align='center'
 	/>
-	<StepsSection />
-	<StillNoHeatingSection />
+	<StepsSection heading={page?.stepsHeading} steps={page?.steps} winterAdvice={page?.winterAdvice} />
+	<StillNoHeatingSection heading={page?.stillNoHeating?.heading} text={page?.stillNoHeating?.text} />
 </Layout>

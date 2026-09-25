@@ -1,0 +1,23 @@
+---
+import { Image } from 'astro:assets';
+import type { Props as PortableTextProps } from 'astro-portabletext/types';
+import type { SanityImage } from '../../sanity/lib/image';
+
+type Props = PortableTextProps<{ _type: string } & Partial<SanityImage>>;
+
+const { url, width, height, alt = '' } = Astro.props.node;
+---
+
+{
+	url && width && height && (
+		<Image
+			src={url}
+			width={width}
+			height={height}
+			alt={alt}
+			widths={[800, 1600]}
+			sizes='(min-width: 800px) 800px, 100vw'
+			class='w-full h-auto rounded-xl'
+		/>
+	)
+}

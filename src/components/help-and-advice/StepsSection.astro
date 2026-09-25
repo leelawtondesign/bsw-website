@@ -2,73 +2,43 @@
 import { Play } from '@lucide/astro';
 import Button from '../Button.astro';
 import HelpStepCard from '../HelpStepCard.astro';
-import Step1 from '../../assets/help-and-advice/step_1.svg';
-import Step2 from '../../assets/help-and-advice/step_2.svg';
-import Step3 from '../../assets/help-and-advice/step_3.svg';
-import Step4 from '../../assets/help-and-advice/step_4.svg';
-import Step5 from '../../assets/help-and-advice/step_5.svg';
-import { WINTER_ADVICE_VIDEO_LINK } from '../../consts';
+import type { SanityImage } from '../../sanity/lib/image';
 
-const steps = [
-	{
-		title: 'Check the basics',
-		description:
-			'Do you have a prepayment meter? If you do, check that you’ve got enough credit. Are your other gas appliances, such as your cooker hob, working? Have the switches in your fuse box tripped?',
-		image: Step1,
-		imageAlt: 'Step 1: fuse box, prepayment meter and gas hob',
-	},
-	{
-		title: 'Have you had a power cut recently?',
-		description:
-			'If you have, the timer on your boiler may have reset. Re-programming it could solve the issue. Have a look at your instruction manual, or visit the manufacturer’s website, for instructions on how to do this.',
-		image: Step2,
-		imageAlt: 'Step 2: boiler timer',
-	},
-	{
-		title: 'Check the pressure',
-		description:
-			'If your boiler’s pressure gauge is at one bar or less, low pressure could be the issue. Your boiler’s manual will tell you how to top up the pressure.',
-		image: Step3,
-		imageAlt: 'Step 3: boiler pressure gauge',
-	},
-	{
-		title: 'Turn your thermostat up',
-		description: 'Turn your thermostat to 21 degrees or higher to see if your boiler starts working.',
-		image: Step4,
-		imageAlt: 'Step 4: room thermostat',
-	},
-	{
-		title: 'Reset your boiler',
-		description:
-			'If your boiler was installed before 2004 it will probably have a pilot light. Check that this hasn’t gone out. If it has, refer to the boiler’s manual to see if you can relight it. For newer boilers, check the instructions for resetting it.',
-		image: Step5,
-		imageAlt: 'Step 5: boiler and relight instructions',
-	},
-];
+interface Props {
+	heading?: string;
+	steps?: { _key: string; title: string; description?: string; image?: SanityImage }[];
+	winterAdvice?: { heading?: string; text?: string; videoUrl?: string };
+}
+
+const { heading, steps = [], winterAdvice } = Astro.props;
 ---
 
 <section class='content-wrapper pt-15 pb-12.5 md:pt-18.75'>
-	<h2 class='text-text-primary text-center max-w-154 mx-auto mb-10 md:mb-13.75'>
-		Try these 6 simple steps to check your boiler before calling us.
-	</h2>
+	{heading && <h2 class='text-text-primary text-center max-w-154 mx-auto mb-10 md:mb-13.75'>{heading}</h2>}
 
 	<ol class='flex flex-col gap-6 md:gap-10'>
 		{
 			steps.map((step) => (
 				<li>
-					<HelpStepCard title={step.title} description={step.description} image={step.image} imageAlt={step.imageAlt} />
+					<HelpStepCard title={step.title} description={step.description} image={step.image} />
 				</li>
 			))
 		}
-		<li class='border border-grey-200 rounded-2xl px-6 py-10 md:px-16 md:py-13 flex flex-col items-center gap-5.5 text-center'>
-			<div class='flex flex-col gap-1.75'>
-				<h3 class='text-h4 text-text-primary'>Winter Advice</h3>
-				<p class='text-lg leading-7 text-text-secondary'>How to unfreeze a frozen boiler condensate pipe.</p>
-			</div>
-			<Button variant='dark' href={WINTER_ADVICE_VIDEO_LINK} target={WINTER_ADVICE_VIDEO_LINK !== '#' ? '_blank' : undefined}>
-				<Play size={20} class='fill-white' stroke-width={1.5} />
-				Watch on YouTube
-			</Button>
-		</li>
+		{
+			winterAdvice?.heading && (
+				<li class='border border-grey-200 rounded-2xl px-6 py-10 md:px-16 md:py-13 flex flex-col items-center gap-5.5 text-center'>
+					<div class='flex flex-col gap-1.75'>
+						<h3 class='text-h4 text-text-primary'>{winterAdvice.heading}</h3>
+						{winterAdvice.text && <p class='text-lg leading-7 text-text-secondary'>{winterAdvice.text}</p>}
+					</div>
+					{winterAdvice.videoUrl && (
+						<Button variant='dark' href={winterAdvice.videoUrl} target='_blank'>
+							<Play size={20} class='fill-white' stroke-width={1.5} />
+							Watch on YouTube
+						</Button>
+					)}
+				</li>
+			)
+		}
 	</ol>
 </section>

@@ -1,18 +1,18 @@
 ---
-import type { ImageMetadata } from 'astro';
+import type { SanityImage } from '../sanity/lib/image';
 import { Image } from 'astro:assets';
 
 interface Props {
 	name: string;
 	role: string;
-	image: ImageMetadata;
+	image: SanityImage;
 }
 
 const { name, role, image } = Astro.props;
 ---
 
 <div class='relative rounded-xl overflow-hidden aspect-255/330 bg-grey-50'>
-	<Image src={image} alt={`${name}, ${role}`} class='w-full h-full object-cover' />
+	<Image src={image.url} width={image.width} height={image.height} widths={[255, 510]} sizes='(min-width: 1024px) 255px, (min-width: 640px) 50vw, 100vw' alt={`${name}, ${role}`} class='w-full h-full object-cover' />
 	<div class='absolute bottom-2.5 inset-x-2 bg-bsw-navy/88 rounded-xl px-3.5 py-3 text-white'>
 		<p class='text-xl font-semibold leading-7'>{name}</p>
 		<p class='text-sm leading-5.25'>{role}</p>

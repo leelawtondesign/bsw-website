@@ -1,34 +1,28 @@
 ---
 import ValueCard from '../ValueCard.astro';
 
-const values = [
-	{
-		title: 'Reliability',
-		description: 'Gas Safe engineers providing scheduled and 24/7 emergency cover, year round.',
-	},
-	{
-		title: 'Partnership',
-		description: 'Long-term relationships with housing associations, councils and public bodies.',
-	},
-	{
-		title: 'Compliance',
-		description: 'Fully accredited, in-house administrative and engineering teams supporting every contract.',
-	},
-];
+interface Props {
+	heading?: string;
+	values?: { _key: string; title: string; description?: string }[];
+}
+
+const { heading = 'What Drives Us', values = [] } = Astro.props;
 ---
 
+{values.length > 0 && (
 <section class='content-wrapper py-15 md:py-20'>
 	<div class='text-center mb-9.75'>
-		<h2 class='text-text-primary'>What Drives Us</h2>
+		<h2 class='text-text-primary'>{heading}</h2>
 	</div>
 
 	<div class='grid grid-cols-12 gap-y-3.75 md:gap-x-7.5'>
 		{
 			values.map((value, index) => (
 				<div class='col-span-12 md:col-span-4'>
-					<ValueCard number={String(index + 1).padStart(2, '0')} title={value.title} description={value.description} />
+					<ValueCard number={String(index + 1).padStart(2, '0')} title={value.title} description={value.description ?? ''} />
 				</div>
 			))
 		}
 	</div>
 </section>
+)}

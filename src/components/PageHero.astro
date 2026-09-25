@@ -1,11 +1,11 @@
 ---
-import type { ImageMetadata } from 'astro';
+import type { SanityImage } from '../sanity/lib/image';
 import { Image } from 'astro:assets';
 
 interface Props {
 	title: string;
 	subtitle?: string;
-	image?: ImageMetadata;
+	image?: SanityImage;
 	variant?: 'navy' | 'orange';
 	align?: 'left' | 'center';
 }
@@ -22,7 +22,9 @@ const { title, subtitle, image, variant = 'navy', align = 'left' } = Astro.props
 		image && (
 			<>
 				<Image
-					src={image}
+					src={image.url}
+					width={image.width}
+					height={image.height}
 					alt=''
 					widths={[640, 1280, 1920, 2528]}
 					sizes='100vw'

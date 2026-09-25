@@ -1,0 +1,10 @@
+---
+import type { Props as PortableTextProps } from 'astro-portabletext/types';
+import LinkArrow from '../LinkArrow.astro';
+
+type Props = PortableTextProps<{ _type: string; url?: string; label?: string; originalFilename?: string }>;
+
+const { url, label, originalFilename } = Astro.props.node;
+---
+
+{url && <LinkArrow text={label || originalFilename || 'Download'} href={url} target='_blank' />}

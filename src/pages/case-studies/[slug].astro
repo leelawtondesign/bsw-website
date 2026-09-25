@@ -1,21 +1,48 @@
 ---
-export const prerender = true;
-
 import { Image } from 'astro:assets';
-import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ArticleHero from '../../components/ArticleHero.astro';
 import ArticleContent from '../../components/ArticleContent.astro';
+import RichText from '../../components/RichText.astro';
 import TestimonialCard from '../../components/TestimonialCard.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
+import { RICH_TEXT } from '../../sanity/lib/rich-text';
+import type { PortableTextBlock, Seo } from '../../sanity/lib/types';
 
-export async function getStaticPaths() {
-	const caseStudies = await getCollection('caseStudies');
-	return caseStudies.map((caseStudy) => ({ params: { slug: caseStudy.id }, props: { caseStudy } }));
+interface CaseStudy {
+	title: string;
+	slug: string;
+	summary?: string;
+	client: string;
+	location: string;
+	value?: string;
+	logo?: SanityImage;
+	content?: PortableTextBlock[];
+	testimonial?: { quote?: string; name?: string; role?: string; rating?: number };
+	seo?: Seo;
 }
 
-const { caseStudy } = Astro.props;
-const { title, summary, client, location, value, logo, logoAlt, testimonial } = caseStudy.data;
-const { Content } = await render(caseStudy);
+export async function getStaticPaths() {
+	const { data } = await loadQuery<CaseStudy[]>({
+		query: `*[_type == "caseStudy" && defined(slug.current)]{
+			title,
+			"slug": slug.current,
+			summary,
+			client,
+			location,
+			value,
+			logo${IMAGE},
+			content${RICH_TEXT},
+			testimonial,
+			seo{ ..., ogImage${IMAGE} }
+		}`,
+	});
+	return (data ?? []).map((caseStudy) => ({ params: { slug: caseStudy.slug }, props: { caseStudy } }));
+}
+
+const { caseStudy } = Astro.props as { caseStudy: CaseStudy };
+const { title, summary, client, location, value, logo, content, testimonial, seo } = caseStudy;
 
 const details = [
 	{ label: 'Client', value: client },
@@ -24,7 +51,10 @@ const details = [
 ];
 ---
 
-<Layout title={`${title} — BSW Heating`} description={summary}>
+<Layout
+	title={seo?.metaTitle ?? `${title} — BSW Heating`}
+	description={seo?.metaDescription ?? summary}
+	image={seo?.ogImage?.url}>
 	<ArticleHero tag={`Case Study · ${location}`} title={title} summary={summary}>
 		<dl class='grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5.25 w-full max-w-199.5 mt-9.5 text-left'>
 			{
@@ -39,14 +69,24 @@ const details = [
 	</ArticleHero>
 
 	<article class='article-wrapper pt-15 pb-20 md:pb-25 flex flex-col gap-10'>
-		{logo && <Image src={logo} alt={logoAlt} height={114} class='h-14.25 w-auto self-start' />}
+		{
+			logo && (
+				<Image
+					src={logo.url}
+					alt={logo.alt ?? ''}
+					width={Math.round((logo.width * 114) / logo.height)}
+					height={114}
+					class='h-14.25 w-auto self-start'
+				/>
+			)
+		}
 
 		<ArticleContent>
-			<Content />
+			<RichText value={content} />
 		</ArticleContent>
 
 		{
-			testimonial && (
+			testimonial?.quote && testimonial.name && (
 				<div class='mt-2.5'>
 					<TestimonialCard
 						quote={testimonial.quote}

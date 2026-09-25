@@ -1,20 +1,30 @@
 ---
 import { Phone } from '@lucide/astro';
 import Button from '../Button.astro';
-import { PHONE } from '../../consts';
+import { getSiteSettings, telHref } from '../../sanity/lib/globals';
+
+interface Props {
+	heading?: string;
+	text?: string;
+}
+
+const { heading = 'Still no heating or hot water?', text } = Astro.props;
+const { phone } = await getSiteSettings();
 ---
 
 <section class='bg-bsw-orange mx-4 rounded-2xl py-15 md:py-20 mb-6.25'>
 	<div class='content-wrapper flex flex-col items-center gap-5.5 text-center text-white'>
 		<div class='flex flex-col gap-1.75 max-w-139'>
-			<h2 class='text-h4'>Still no heating or hot water?</h2>
-			<p class='text-lg leading-7'>
-				If these tips haven’t worked, and you are still without heating or hot water, please call us on
-			</p>
+			<h2 class='text-h4'>{heading}</h2>
+			{text && <p class='text-lg leading-7'>{text}</p>}
 		</div>
-		<Button variant='white' href={`tel:${PHONE.replace(/\s/g, '')}`}>
-			<Phone size={20} stroke-width={1.5} />
-			{PHONE}
-		</Button>
+		{
+			phone && (
+				<Button variant='white' href={telHref(phone)}>
+					<Phone size={20} stroke-width={1.5} />
+					{phone}
+				</Button>
+			)
+		}
 	</div>
 </section>

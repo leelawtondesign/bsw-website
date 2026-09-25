@@ -1,37 +1,67 @@
 ---
-export const prerender = true;
-
 import { Image } from 'astro:assets';
-import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ArticleHero from '../../components/ArticleHero.astro';
 import ArticleContent from '../../components/ArticleContent.astro';
+import RichText from '../../components/RichText.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
+import { RICH_TEXT } from '../../sanity/lib/rich-text';
+import type { PortableTextBlock, Seo } from '../../sanity/lib/types';
 
-export async function getStaticPaths() {
-	const articles = await getCollection('news');
-	return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+interface NewsArticle {
+	title: string;
+	slug: string;
+	summary?: string;
+	articleDate: string;
+	featureImage?: SanityImage;
+	content?: PortableTextBlock[];
+	seo?: Seo;
 }
 
-const { article } = Astro.props;
-const { title, summary, articleDate, image, imageAlt } = article.data;
-const { Content } = await render(article);
+export async function getStaticPaths() {
+	const { data } = await loadQuery<NewsArticle[]>({
+		query: `*[_type == "newsArticle" && defined(slug.current)]{
+			title,
+			"slug": slug.current,
+			summary,
+			articleDate,
+			featureImage${IMAGE},
+			content${RICH_TEXT},
+			seo{ ..., ogImage${IMAGE} }
+		}`,
+	});
+	return (data ?? []).map((article) => ({ params: { slug: article.slug }, props: { article } }));
+}
 
-const formattedDate = articleDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+const { article } = Astro.props as { article: NewsArticle };
+const { title, summary, articleDate, featureImage, content, seo } = article;
+
+const formattedDate = new Date(articleDate).toLocaleDateString('en-US', {
+	month: 'long',
+	day: 'numeric',
+	year: 'numeric',
+});
 ---
 
-<Layout title={`${title} — BSW Heating`} description={summary}>
+<Layout
+	title={seo?.metaTitle ?? `${title} — BSW Heating`}
+	description={seo?.metaDescription ?? summary}
+	image={seo?.ogImage?.url ?? featureImage?.url}>
 	<ArticleHero tag={`Posted ${formattedDate}`} title={title} summary={summary} />
 
 	<article class='article-wrapper pt-15 pb-20 md:pb-25 flex flex-col gap-12.5'>
 		<ArticleContent>
-			<Content />
+			<RichText value={content} />
 		</ArticleContent>
 
 		{
-			image && (
+			featureImage && (
 				<Image
-					src={image}
-					alt={imageAlt}
+					src={featureImage.url}
+					width={featureImage.width}
+					height={featureImage.height}
+					alt={featureImage.alt ?? ''}
 					widths={[342, 684]}
 					sizes='342px'
 					class='w-full max-w-85.5 aspect-342/204 object-cover rounded-xl'

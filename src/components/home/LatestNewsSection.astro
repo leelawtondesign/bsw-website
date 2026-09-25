@@ -1,39 +1,29 @@
 ---
 import NewsCard from '../NewsCard.astro';
-import Hillingdon from '../../assets/news/hillingdon.webp';
-import NottingHillGenesis from '../../assets/news/notting_hill_genesis.webp';
-import Anchor from '../../assets/news/anchor.webp';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
 
-// Temporary content — to be replaced by the news source once it is set up
-const articles = [
-	{
-		title: 'BSW Awarded New Contract with London Borough of Hillingdon',
-		summary:
-			'BSW is pleased to announce that it has been awarded a new contract with the London Borough of Hillingdon for the servicing, maintenance, and installation of commercial heating systems.',
-		articleDate: '2026-06-20',
-		slug: 'bsw-awarded-new-contract-with-london-borough-of-hillingdon',
-		image: Hillingdon,
-		imageAlt: 'London Borough of Hillingdon logo',
-	},
-	{
-		title: 'BSW Awarded New Contract with London Borough of Hillingdon',
-		summary:
-			'BSW is pleased to announce that it has been awarded a new contract with the London Borough of Hillingdon for the servicing, maintenance, and installation of commercial heating systems.',
-		articleDate: '2026-06-20',
-		slug: 'bsw-awarded-new-contract-with-notting-hill-genesis',
-		image: NottingHillGenesis,
-		imageAlt: 'Notting Hill Genesis logo',
-	},
-	{
-		title: 'BSW Awarded New Contract with London Borough of Hillingdon',
-		summary:
-			'BSW is pleased to announce that it has been awarded a new contract with the London Borough of Hillingdon for the servicing, maintenance, and installation of commercial heating systems.',
-		articleDate: '2026-06-20',
-		slug: 'bsw-awarded-new-contract-with-anchor',
-		image: Anchor,
-		imageAlt: 'Anchor logo',
-	},
-];
+interface Article {
+	_id: string;
+	title: string;
+	summary?: string;
+	articleDate?: string;
+	slug: string;
+	image?: SanityImage;
+}
+
+const { data } = await loadQuery<Article[]>({
+	query: `*[_type == "newsArticle"] | order(articleDate desc) [0...3] {
+		_id,
+		title,
+		summary,
+		articleDate,
+		"slug": slug.current,
+		"image": featureImage${IMAGE}
+	}`,
+});
+
+const articles = data ?? [];
 ---
 
 {
@@ -52,7 +42,6 @@ const articles = [
 							summary={article.summary}
 							articleDate={article.articleDate}
 							image={article.image}
-							imageAlt={article.imageAlt}
 							slug={article.slug}
 						/>
 					</div>

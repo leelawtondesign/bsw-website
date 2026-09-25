@@ -1,22 +1,24 @@
 ---
 import { Clock, Mail, MapPin, Phone } from '@lucide/astro';
 import ContactForm from '../ContactForm.astro';
-import { ADDRESS_LINE_1, ADDRESS_LINE_2, EMAIL, OPENING_HOURS, PHONE } from '../../consts';
+import { getSiteSettings, telHref } from '../../sanity/lib/globals';
+
+const { phone, email, addressLine1, addressLine2, openingHours, contactSection } = await getSiteSettings();
 
 const details = [
-	{ icon: Phone, label: 'Call us', value: PHONE, href: `tel:${PHONE.replace(/\s/g, '')}` },
-	{ icon: Mail, label: 'Email us', value: EMAIL, href: `mailto:${EMAIL}` },
-	{ icon: MapPin, label: 'Visit our office', value: `${ADDRESS_LINE_1} ${ADDRESS_LINE_2}` },
-	{ icon: Clock, label: 'Opening hours', value: OPENING_HOURS },
-];
+	phone && { icon: Phone, label: 'Call us', value: phone, href: telHref(phone) },
+	email && { icon: Mail, label: 'Email us', value: email, href: `mailto:${email}` },
+	addressLine1 && { icon: MapPin, label: 'Visit our office', value: `${addressLine1} ${addressLine2 ?? ''}`.trim() },
+	openingHours && { icon: Clock, label: 'Opening hours', value: openingHours },
+].filter((detail) => !!detail) as { icon: typeof Phone; label: string; value: string; href?: string }[];
 ---
 
 <section class='content-wrapper py-15 md:py-17.5 scroll-m-10' id='contact-form-section'>
 	<div class='grid grid-cols-12 gap-y-10 md:gap-x-6.5 items-start'>
 		<!-- Left: intro + contact details -->
 		<div class='col-span-12 md:col-span-6 flex flex-col items-start gap-3'>
-			<h2 class='text-text-primary'>Any questions? Just ask</h2>
-			<p class='text-text-primary max-w-114'>Fill out the form and one of our team will be in touch shortly.</p>
+			<h2 class='text-text-primary'>{contactSection?.heading ?? 'Any questions? Just ask'}</h2>
+			{contactSection?.text && <p class='text-text-primary max-w-114'>{contactSection.text}</p>}
 
 			<ul class='flex flex-col gap-5 mt-7'>
 				{

@@ -1,26 +1,28 @@
 ---
 import { Mail, MapPin, Phone } from '@lucide/astro';
 import LinkArrow from '../LinkArrow.astro';
-import { ADDRESS_LINE_1, ADDRESS_LINE_2, EMAIL, OPENING_HOURS, PHONE } from '../../consts';
+import { getSiteSettings, telHref } from '../../sanity/lib/globals';
+
+const { email = '', phone = '', openingHours, addressLine1 = '', addressLine2 = '' } = await getSiteSettings();
 
 const methods = [
 	{
 		icon: Mail,
 		title: 'Email',
 		description: "Have a question? Email us and we'll get back to you within 24 hours.",
-		link: { text: EMAIL, href: `mailto:${EMAIL}` },
+		link: { text: email, href: `mailto:${email}` },
 	},
 	{
 		icon: Phone,
 		title: 'Call us',
-		description: `Speak with our team. We're available ${OPENING_HOURS}.`,
-		link: { text: PHONE, href: `tel:${PHONE.replace(/\s/g, '')}` },
+		description: openingHours ? `Speak with our team. We're available ${openingHours}.` : 'Speak with our team.',
+		link: { text: phone, href: telHref(phone) },
 	},
 	{
 		icon: MapPin,
 		title: 'Address',
 		description: 'Visit our office',
-		address: `BSW Heating Ltd, ${ADDRESS_LINE_1} ${ADDRESS_LINE_2}`,
+		address: `BSW Heating Ltd, ${addressLine1} ${addressLine2}`,
 	},
 ];
 ---

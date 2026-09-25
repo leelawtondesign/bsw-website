@@ -1,19 +1,17 @@
 ---
 import { ChevronDown } from '@lucide/astro';
+import { getServices } from '../sanity/lib/globals';
 
 const { mobile = false } = Astro.props;
+
+const services = await getServices();
 
 const items = [
 	{ href: '/about-us', label: 'About Us' },
 	{
 		href: '/services',
 		label: 'Services',
-		children: [
-			{ href: '/services/domestic', label: 'Domestic Maintenance & Installations' },
-			{ href: '/services/commercial', label: 'Commercial Maintenance & Installations' },
-			{ href: '/services/mechanical-electrical', label: 'Mechanical & Electrical Projects' },
-			{ href: '/services/renewables', label: 'Renewable Technologies' },
-		],
+		children: services.map((service) => ({ href: `/services/${service.slug}`, label: service.title })),
 	},
 	{ href: '/help-and-advice', label: 'Help and Advice' },
 	{ href: '/contact', label: 'Contact Us' },

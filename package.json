@@ -14,9 +14,12 @@
   "dependencies": {
     "@astrojs/netlify": "^8.2.6",
     "@lucide/astro": "^1.47.0",
+    "@sanity/client": "^7.27.0",
+    "@sanity/image-url": "^2.1.1",
     "@sendgrid/mail": "^8.1.6",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.4",
+    "astro-portabletext": "^1.0.1",
     "sharp": "^0.35.4",
     "tailwindcss": "^4.3.3"
   },

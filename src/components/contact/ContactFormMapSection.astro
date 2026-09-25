@@ -1,6 +1,8 @@
 ---
 import ContactForm from '../ContactForm.astro';
-import { MAP_EMBED_URL } from '../../consts';
+import { getSiteSettings } from '../../sanity/lib/globals';
+
+const { mapEmbedUrl } = await getSiteSettings();
 ---
 
 <section class='content-wrapper py-15 md:py-25 scroll-m-10' id='contact-form-section'>
@@ -8,7 +10,7 @@ import { MAP_EMBED_URL } from '../../consts';
 		<!-- Left: map -->
 		<div class='col-span-12 md:col-span-6 h-80 md:h-120 rounded-2xl overflow-hidden border border-grey-200 bg-grey-50'>
 			<iframe
-				src={MAP_EMBED_URL}
+				src={mapEmbedUrl}
 				title='Map showing the BSW Heating office in Kenley, Surrey'
 				loading='lazy'
 				referrerpolicy='no-referrer-when-downgrade'

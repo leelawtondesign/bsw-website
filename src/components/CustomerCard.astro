@@ -1,10 +1,10 @@
 ---
-import type { ImageMetadata } from 'astro';
+import type { SanityImage } from '../sanity/lib/image';
 import { Image } from 'astro:assets';
 
 interface Props {
 	name: string;
-	logo: ImageMetadata;
+	logo: SanityImage;
 }
 
 const { name, logo } = Astro.props;
@@ -12,8 +12,9 @@ const { name, logo } = Astro.props;
 
 <div class='bg-white rounded-xl shadow-card w-63 shrink-0 px-10.75 py-6 flex items-center justify-center'>
 	<Image
-		src={logo}
+		src={logo.url}
 		alt={name}
+		width={Math.round((logo.width * 140) / logo.height)}
 		height={140}
 		class='h-17.5 w-41.25 object-contain'
 	/>

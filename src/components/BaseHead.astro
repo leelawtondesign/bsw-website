@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from '../consts';
+import { SITE_NAME } from '../consts';
+import { getSiteSettings } from '../sanity/lib/globals';
 
 interface Props {
 	title?: string;
@@ -8,7 +9,13 @@ interface Props {
 	image?: string;
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION, image } = Astro.props;
+const settings = await getSiteSettings();
+
+const {
+	title = settings.seo?.metaTitle ?? SITE_NAME,
+	description = settings.seo?.metaDescription ?? '',
+	image = settings.seo?.ogImage?.url,
+} = Astro.props;
 
 const pageTitle = title?.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
 

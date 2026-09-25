@@ -1,44 +1,44 @@
 ---
-import type { ImageMetadata } from 'astro';
+import type { SanityImage } from '../../sanity/lib/image';
 import { Image } from 'astro:assets';
 
 interface Reason {
 	title: string;
-	description: string;
+	description?: string;
 }
 
 interface Props {
-	tag: string;
-	heading: string;
-	intro: string;
-	image: ImageMetadata;
-	imageAlt: string;
-	reasons: Reason[];
-	headingClass?: string;
+	tag?: string;
+	heading?: string;
+	intro?: string;
+	image?: SanityImage;
+	reasons?: Reason[];
 }
 
-const { tag, heading, intro, image, imageAlt, reasons, headingClass = '' } = Astro.props;
+const { tag, heading, intro, image, reasons = [] } = Astro.props;
 ---
 
 <section class='content-wrapper py-15 md:py-25'>
 	<div class='grid grid-cols-12 gap-y-10 md:gap-x-10 lg:gap-x-16.25 items-start'>
 		<!-- Left: image -->
 		<div class='col-span-12 md:col-span-6 rounded-2xl overflow-hidden aspect-503/541'>
-			<Image
-				src={image}
-				alt={imageAlt}
+			{image && <Image
+				src={image.url}
+				width={image.width}
+				height={image.height}
+				alt={image.alt ?? ''}
 				widths={[520, 1040]}
 				sizes='(min-width: 768px) 504px, 100vw'
 				quality={80}
 				class='w-full h-full object-cover'
-			/>
+			/>}
 		</div>
 
 		<!-- Right: copy + reasons -->
 		<div class='col-span-12 md:col-span-6 flex flex-col gap-8.75'>
 			<div class='flex flex-col items-start gap-5.5'>
 				<p class='uppercase-tag text-bsw-orange-text'>{tag}</p>
-				<h2 class:list={['text-text-primary', headingClass]}>{heading}</h2>
+				<h2 class='text-text-primary'>{heading}</h2>
 				<p class='text-text-primary'>{intro}</p>
 			</div>
 

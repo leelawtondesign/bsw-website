@@ -1,5 +1,4 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import Layout from '../layouts/Layout.astro';
 import HeroSection from '../components/home/HeroSection.astro';
 import AboutSection from '../components/home/AboutSection.astro';
@@ -7,11 +6,42 @@ import ServicesSection from '../components/home/ServicesSection.astro';
 import LatestNewsSection from '../components/home/LatestNewsSection.astro';
 import CustomersSection from '../components/home/CustomersSection.astro';
 import ContactFormSection from '../components/home/ContactFormSection.astro';
+import { loadQuery } from '../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../sanity/lib/image';
+import type { ImageTextSection, Link, PortableTextBlock, Seo } from '../sanity/lib/types';
+
+interface HomePage {
+	heroTag?: string;
+	heroHeading?: PortableTextBlock[];
+	heroText?: string;
+	heroImage?: SanityImage;
+	heroMainButton?: Link;
+	heroSecondaryButton?: Link;
+	about?: ImageTextSection;
+	aboutHighlights?: { _key: string; icon?: string; text: string }[];
+	seo?: Seo;
+}
+
+const { data: page } = await loadQuery<HomePage>({
+	query: `*[_id == "homePage"][0]{
+		...,
+		heroImage${IMAGE},
+		about{ ..., image${IMAGE} },
+		seo{ ..., ogImage${IMAGE} }
+	}`,
+});
 ---
 
-<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<HeroSection />
-	<AboutSection />
+<Layout title={page?.seo?.metaTitle} description={page?.seo?.metaDescription} image={page?.seo?.ogImage?.url}>
+	<HeroSection
+		tag={page?.heroTag}
+		heading={page?.heroHeading}
+		text={page?.heroText}
+		image={page?.heroImage}
+		mainButton={page?.heroMainButton}
+		secondaryButton={page?.heroSecondaryButton}
+	/>
+	<AboutSection section={page?.about} highlights={page?.aboutHighlights} />
 	<ServicesSection />
 	<LatestNewsSection />
 	<CustomersSection />

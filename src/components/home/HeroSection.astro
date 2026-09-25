@@ -1,36 +1,75 @@
 ---
 import { Image } from 'astro:assets';
+import { PortableText } from 'astro-portabletext';
 import Button from '../Button.astro';
-import HeroImage from '../../assets/home/hero_bg.webp';
+import Highlight from '../portable-text/Highlight.astro';
+import InlineBlock from '../portable-text/InlineBlock.astro';
+import type { SanityImage } from '../../sanity/lib/image';
+import type { Link, PortableTextBlock } from '../../sanity/lib/types';
+
+interface Props {
+	tag?: string;
+	heading?: PortableTextBlock[];
+	text?: string;
+	image?: SanityImage;
+	mainButton?: Link;
+	secondaryButton?: Link;
+}
+
+const { tag, heading, text, image, mainButton, secondaryButton } = Astro.props;
 ---
 
 <section class='bg-bsw-navy mx-4 rounded-2xl overflow-hidden relative flex flex-col lg:block lg:min-h-185.25'>
 	<div class='content-wrapper z-10 pt-32 pb-10 md:pt-40 lg:pt-49 lg:pb-30 relative'>
 		<div class='text-white hero-content flex flex-col items-start gap-6.5 max-w-120'>
-			<p class='uppercase-tag text-text-tertiary flex items-center gap-2'>
-				<span class='block w-3.25 border-t border-text-tertiary' aria-hidden='true'></span>
-				Domestic &amp; Commercial Heating Specialists
-			</p>
+			{
+				tag && (
+					<p class='uppercase-tag text-text-tertiary flex items-center gap-2'>
+						<span class='block w-3.25 border-t border-text-tertiary' aria-hidden='true' />
+						{tag}
+					</p>
+				)
+			}
 
-			<h1>Gas, heating and renewables <span class='text-bsw-orange'>for the South East.</span></h1>
+			{
+				heading && (
+					<h1>
+						<PortableText value={heading} components={{ block: { normal: InlineBlock }, mark: { highlight: Highlight } }} />
+					</h1>
+				)
+			}
 
-			<p class='text-lg leading-7'>
-				BSW Heating Limited delivers professional servicing, maintenance and installation for housing associations, local
-				authorities, education providers and homeowners.
-			</p>
+			{text && <p class='text-lg leading-7'>{text}</p>}
 
-			<div class='flex flex-col sm:flex-row w-full sm:w-auto gap-3 sm:gap-5 pt-6.5'>
-				<Button href='/services'>Explore Services</Button>
-				<Button href='#contact-form-section' variant='outline-light'>Contact Us</Button>
-			</div>
+			{
+				(mainButton?.href || secondaryButton?.href) && (
+					<div class='flex flex-col sm:flex-row w-full sm:w-auto gap-3 sm:gap-5 pt-6.5'>
+						{mainButton?.href && (
+							<Button href={mainButton.href} target={mainButton.newTab ? '_blank' : undefined}>
+								{mainButton.label}
+							</Button>
+						)}
+						{secondaryButton?.href && (
+							<Button
+								href={secondaryButton.href}
+								target={secondaryButton.newTab ? '_blank' : undefined}
+								variant='outline-light'>
+								{secondaryButton.label}
+							</Button>
+						)}
+					</div>
+				)
+			}
 		</div>
 	</div>
 
 	<!-- Background image, faded into the navy panel -->
 	<div
 		class='relative h-64 sm:h-80 md:h-105 -mt-16 lg:mt-0 lg:h-auto lg:absolute lg:-top-7 lg:-bottom-7 lg:left-[8.75%] lg:-right-12 pointer-events-none'>
-		<Image
-			src={HeroImage}
+		{image && <Image
+			src={image.url}
+			width={image.width}
+			height={image.height}
 			alt=''
 			widths={[640, 1280, 1920, 2528]}
 			sizes='(min-width: 1024px) 95vw, 100vw'
@@ -38,7 +77,7 @@ import HeroImage from '../../assets/home/hero_bg.webp';
 			loading='eager'
 			fetchpriority='high'
 			class='hero-image absolute inset-0 w-full h-full object-cover object-[70%_center] lg:object-center'
-		/>
+		/>}
 		<div class='absolute inset-0 bg-linear-to-b lg:hidden from-bsw-navy to-transparent to-60%'></div>
 	</div>
 	<div

@@ -1,4 +1,5 @@
 ---
+import { PortableText } from 'astro-portabletext';
 import Layout from '../../layouts/Layout.astro';
 import PageHero from '../../components/PageHero.astro';
 import ImageTextSection from '../../components/ImageTextSection.astro';
@@ -6,43 +7,66 @@ import StatsSection from '../../components/about-us/StatsSection.astro';
 import ValuesSection from '../../components/about-us/ValuesSection.astro';
 import TeamSection from '../../components/about-us/TeamSection.astro';
 import ContactFormSection from '../../components/home/ContactFormSection.astro';
-import AboutHero from '../../assets/about-us/about_hero.webp';
-import TeamPhoto from '../../assets/about-us/team_photo.webp';
-import CustomerService from '../../assets/about-us/customer_service.webp';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE } from '../../sanity/lib/image';
+import type { ImageTextSection as Section, PageHero as Hero, Seo } from '../../sanity/lib/types';
+
+interface AboutPage {
+	hero?: Hero;
+	introSection?: Section;
+	stats?: { _key: string; value: string; label?: string }[];
+	valuesHeading?: string;
+	values?: { _key: string; title: string; description?: string }[];
+	customerServiceSection?: Section;
+	teamHeading?: string;
+	teamText?: string;
+	seo?: Seo;
+}
+
+const { data: page } = await loadQuery<AboutPage>({
+	query: `*[_id == "aboutPage"][0]{
+		...,
+		hero{ ..., image${IMAGE} },
+		introSection{ ..., image${IMAGE} },
+		customerServiceSection{ ..., image${IMAGE} },
+		seo{ ..., ogImage${IMAGE} }
+	}`,
+});
 ---
 
 <Layout
-	title='About Us — BSW Heating'
-	description='BSW Heating is a family owned and run heating servicing, maintenance and installation company trusted by organisations across the South East.'>
-	<PageHero title='About Us' subtitle='Lorem ipsum dolor sit amet consectetur. Consectetur.' image={AboutHero} />
+	title={page?.seo?.metaTitle ?? 'About Us'}
+	description={page?.seo?.metaDescription}
+	image={page?.seo?.ogImage?.url}>
+	<PageHero title={page?.hero?.title ?? 'About Us'} subtitle={page?.hero?.subtitle} image={page?.hero?.image} />
 
-	<ImageTextSection
-		tag='Long-Term Partnerships'
-		heading='Keeping Homes and Buildings Running Efficiently'
-		image={TeamPhoto}
-		imageAlt='The BSW Heating team outside the Kenley head office'>
-		<p>
-			From large-scale installations to ongoing maintenance and repairs, our Gas Safe engineers and dedicated operations
-			team deliver responsive heating solutions trusted by organisations across the South East.
-		</p>
-	</ImageTextSection>
+	{
+		page?.introSection && (
+			<ImageTextSection
+				tag={page.introSection.tag}
+				heading={page.introSection.heading}
+				image={page.introSection.image}>
+				{page.introSection.text && <PortableText value={page.introSection.text} />}
+			</ImageTextSection>
+		)
+	}
 
-	<StatsSection />
-	<ValuesSection />
+	<StatsSection stats={page?.stats} />
+	<ValuesSection heading={page?.valuesHeading} values={page?.values} />
 
-	<ImageTextSection
-		tag='Customer Service Team'
-		heading='Here to help, every step of the way'
-		image={CustomerService}
-		imageAlt='BSW customer service team members at their desks'
-		imagePosition='right'
-		class='pt-5 pb-15 md:pt-6.25 md:pb-25'>
-		<p>
-			Our in-house customer service team handles enquiries, scheduling and support for residents and clients across
-			every contract, making sure every call and repair request is handled promptly and professionally.
-		</p>
-	</ImageTextSection>
+	{
+		page?.customerServiceSection && (
+			<ImageTextSection
+				tag={page.customerServiceSection.tag}
+				heading={page.customerServiceSection.heading}
+				image={page.customerServiceSection.image}
+				imagePosition='right'
+				class='pt-5 pb-15 md:pt-6.25 md:pb-25'>
+				{page.customerServiceSection.text && <PortableText value={page.customerServiceSection.text} />}
+			</ImageTextSection>
+		)
+	}
 
-	<TeamSection />
+	<TeamSection heading={page?.teamHeading} text={page?.teamText} />
 	<ContactFormSection />
 </Layout>

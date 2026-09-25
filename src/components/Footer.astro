@@ -1,24 +1,13 @@
 ---
 import { Image } from 'astro:assets';
 import BswLogo from '../assets/brand/bsw_logo_white.svg';
-import { ADDRESS_LINE_1, ADDRESS_LINE_2, COMPANY_NUMBER, EMAIL, PHONE, VAT_NUMBER } from '../consts';
+import { getFooter, getSiteSettings, telHref } from '../sanity/lib/globals';
 
 const today = new Date();
 
-const resourceLinks = [
-	{ href: '/privacy-and-cookie-policy', label: 'Privacy & Cookie Policy' },
-	{ href: '/gender-pay-gap-report', label: 'Gender Pay Gap Report' },
-	{ href: '/modern-slavery-policy', label: 'Modern Slavery Policy' },
-	{ href: '/complaints-policy', label: 'Complaints Policy' },
-	{ href: '/carbon-reduction-plan', label: 'Carbon Reduction Plan' },
-];
-
-const companyLinks = [
-	{ href: '/news', label: 'News' },
-	{ href: '/help-and-advice', label: 'Help and Advice' },
-	{ href: '/careers', label: 'Careers' },
-	{ href: '/contact', label: 'Contact Us' },
-];
+const [settings, footer] = await Promise.all([getSiteSettings(), getFooter()]);
+const { addressLine1 = '', addressLine2 = '', phone, email, companyNumber, vatNumber } = settings;
+const linkColumns = [footer.column3, footer.column4].filter((column) => column?.links?.length);
 
 const linkClass = 'text-sm leading-5 text-white/70 hover:text-bsw-orange transition-colors';
 const headingClass = 'text-sm leading-5 font-bold text-white';
@@ -32,56 +21,46 @@ const headingClass = 'text-sm leading-5 font-bold text-white';
 				<a href='/' aria-label='BSW Heating home'>
 					<Image src={BswLogo} alt='BSW Heating' class='w-35 h-auto' />
 				</a>
-				<p class='text-sm leading-5.25 text-white/70 max-w-60'>
-					BSW Heating Limited is a domestic and commercial heating servicing, maintenance and installation company.
-				</p>
+				{footer.column1?.description && <p class='text-sm leading-5.25 text-white/70 max-w-60'>{footer.column1.description}</p>}
 			</div>
 
 			<!-- Location & contact -->
 			<div class='flex flex-col gap-3 lg:py-3.25'>
-				<p class={headingClass}>Location &amp; Contact</p>
+				<p class={headingClass}>{footer.column2?.heading ?? 'Location & Contact'}</p>
 				<address class='not-italic text-sm leading-5.25 text-white/70 py-1'>
-					{ADDRESS_LINE_1}<br />
-					{ADDRESS_LINE_2}
+					{addressLine1}<br />
+					{addressLine2}
 				</address>
-				<div><a class={linkClass} href={`tel:${PHONE.replace(/\s/g, '')}`}>{PHONE}</a></div>
-				<div><a class={linkClass} href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+				{phone && <div><a class={linkClass} href={telHref(phone)}>{phone}</a></div>}
+				{email && <div><a class={linkClass} href={`mailto:${email}`}>{email}</a></div>}
 			</div>
 
-			<!-- Resources -->
-			<div class='flex flex-col gap-3 lg:py-3.25'>
-				<p class={headingClass}>Resources</p>
-				{
-					resourceLinks.map((link) => (
-						<div>
-							<a class={linkClass} href={link.href}>
-								{link.label}
-							</a>
-						</div>
-					))
-				}
-			</div>
-
-			<!-- Company -->
-			<div class='flex flex-col gap-3 lg:py-3.25'>
-				<p class={headingClass}>Company</p>
-				{
-					companyLinks.map((link) => (
-						<div>
-							<a class={linkClass} href={link.href}>
-								{link.label}
-							</a>
-						</div>
-					))
-				}
-			</div>
+			<!-- Link columns -->
+			{
+				linkColumns.map((column) => (
+					<div class='flex flex-col gap-3 lg:py-3.25'>
+						{column?.heading && <p class={headingClass}>{column.heading}</p>}
+						{column?.links?.map((link) => (
+							<div>
+								<a
+									class={linkClass}
+									href={link.href}
+									target={link.newTab ? '_blank' : undefined}
+									rel={link.newTab ? 'noopener' : undefined}>
+									{link.label}
+								</a>
+							</div>
+						))}
+					</div>
+				))
+			}
 		</div>
 
 		<!-- Copyright -->
 		<div class='pt-12.75 flex flex-col gap-2.5 text-white/55'>
 			<p class='text-sm leading-5.25'>© Copyright BSW Heating {today.getFullYear()}</p>
 			<p class='text-[13px] leading-5'>
-				{`BSW Heating Ltd, ${ADDRESS_LINE_1} ${ADDRESS_LINE_2}. Registered in England (${COMPANY_NUMBER}). VAT No: ${VAT_NUMBER}`}
+				{`BSW Heating Ltd, ${addressLine1} ${addressLine2}. Registered in England (${companyNumber}). VAT No: ${vatNumber}`}
 			</p>
 		</div>
 	</div>

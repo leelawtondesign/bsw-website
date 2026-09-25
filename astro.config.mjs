@@ -9,6 +9,7 @@ export default defineConfig({
 	output: 'static',
 	adapter: netlify(),
 	image: {
+		domains: ['cdn.sanity.io'],
 		service: { entrypoint: 'astro/assets/services/sharp' },
 	},
 	vite: {

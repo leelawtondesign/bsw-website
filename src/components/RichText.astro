@@ -1,0 +1,27 @@
+---
+import { PortableText } from 'astro-portabletext';
+import type { PortableTextBlock } from '../sanity/lib/types';
+import Link from './portable-text/Link.astro';
+import Image from './portable-text/Image.astro';
+import Table from './portable-text/Table.astro';
+import File from './portable-text/File.astro';
+
+// Renders Sanity rich text. Wrap in ArticleContent for the article body styles.
+interface Props {
+	value?: PortableTextBlock[];
+}
+
+const { value } = Astro.props;
+---
+
+{
+	value && (
+		<PortableText
+			value={value}
+			components={{
+				type: { image: Image, table: Table, downloadableFile: File },
+				mark: { link: Link },
+			}}
+		/>
+	)
+}

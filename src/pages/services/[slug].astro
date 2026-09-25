@@ -1,0 +1,71 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceIntroSection from '../../components/services/ServiceIntroSection.astro';
+import ContractWinsSection from '../../components/services/ContractWinsSection.astro';
+import ContactFormSection from '../../components/home/ContactFormSection.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
+import type { Seo } from '../../sanity/lib/types';
+
+interface ServicePage {
+	title: string;
+	slug: string;
+	heroSubtitle?: string;
+	heroImage?: SanityImage;
+	intro?: {
+		tag?: string;
+		heading?: string;
+		text?: string;
+		image?: SanityImage;
+		reasons?: { _key: string; title: string; description?: string }[];
+	};
+	caseStudies: {
+		client: string;
+		location: string;
+		summary?: string;
+		slug: string;
+		logo?: SanityImage;
+	}[];
+	seo?: Seo;
+}
+
+export async function getStaticPaths() {
+	const { data } = await loadQuery<ServicePage[]>({
+		query: `*[_type == "servicePage" && defined(slug.current)]{
+			title,
+			"slug": slug.current,
+			heroSubtitle,
+			heroImage${IMAGE},
+			intro{ ..., image${IMAGE} },
+			"caseStudies": *[_type == "caseStudy" && references(^._id)] | order(_createdAt desc) {
+				client,
+				location,
+				summary,
+				"slug": slug.current,
+				logo${IMAGE}
+			},
+			seo{ ..., ogImage${IMAGE} }
+		}`,
+	});
+	return (data ?? []).map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props as { service: ServicePage };
+---
+
+<Layout
+	title={service.seo?.metaTitle ?? service.title}
+	description={service.seo?.metaDescription}
+	image={service.seo?.ogImage?.url}>
+	<PageHero title={service.title} subtitle={service.heroSubtitle} image={service.heroImage} />
+	<ServiceIntroSection
+		tag={service.intro?.tag}
+		heading={service.intro?.heading}
+		intro={service.intro?.text}
+		image={service.intro?.image}
+		reasons={service.intro?.reasons}
+	/>
+	<ContractWinsSection caseStudies={service.caseStudies} />
+	<ContactFormSection />
+</Layout>
