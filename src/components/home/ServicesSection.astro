@@ -3,6 +3,12 @@ import ServiceCard from '../ServiceCard.astro';
 import { Building, House, SolarPanel, TruckElectric } from '@lucide/astro';
 import { getServices } from '../../sanity/lib/globals';
 
+interface Props {
+	heading?: string;
+}
+
+const { heading = 'Our Services' } = Astro.props;
+
 const services = await getServices();
 
 const icons: Record<string, typeof House> = {
@@ -15,7 +21,7 @@ const icons: Record<string, typeof House> = {
 
 <section class='bg-bsw-navy mx-4 rounded-2xl overflow-hidden pt-15 pb-15 md:pt-21.25 md:pb-25'>
 	<div class='content-wrapper'>
-		<h2 class='text-center text-white mb-9.75'>Our Services</h2>
+		<h2 class='text-center text-white mb-9.75'>{heading}</h2>
 
 		<!-- Swipeable row on phones, grid from sm up -->
 		<div

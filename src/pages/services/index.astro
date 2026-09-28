@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServicesIntroSection from '../../components/services/ServicesIntroSection.astro';
+import ServicesSection from '../../components/home/ServicesSection.astro';
+import ContactFormSection from '../../components/home/ContactFormSection.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE } from '../../sanity/lib/image';
+import type { PageHero as Hero, Seo } from '../../sanity/lib/types';
+
+interface ServicesPage {
+	hero?: Hero;
+	intro?: { tag?: string; heading?: string; text?: string };
+	expertise?: { heading?: string; items?: string[] };
+	servicesHeading?: string;
+	seo?: Seo;
+}
+
+const { data: page } = await loadQuery<ServicesPage>({
+	query: `*[_id == "servicesPage"][0]{
+		...,
+		hero{ ..., image${IMAGE} },
+		seo{ ..., ogImage${IMAGE} }
+	}`,
+});
+---
+
+<Layout
+	title={page?.seo?.metaTitle ?? 'Our Services'}
+	description={page?.seo?.metaDescription ?? page?.intro?.text}
+	image={page?.seo?.ogImage?.url}>
+	<PageHero title={page?.hero?.title ?? 'Our Services'} subtitle={page?.hero?.subtitle} image={page?.hero?.image} />
+	<ServicesIntroSection
+		tag={page?.intro?.tag}
+		heading={page?.intro?.heading}
+		text={page?.intro?.text}
+		expertiseHeading={page?.expertise?.heading}
+		expertise={page?.expertise?.items}
+	/>
+	<ServicesSection heading={page?.servicesHeading} />
+	<ContactFormSection />
+</Layout>
