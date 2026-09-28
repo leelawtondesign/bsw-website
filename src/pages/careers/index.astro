@@ -1,0 +1,96 @@
+---
+import { Mail } from '@lucide/astro';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import VacancyCard from '../../components/careers/VacancyCard.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE } from '../../sanity/lib/image';
+import type { PageHero as Hero, Seo } from '../../sanity/lib/types';
+
+interface CareersPage {
+	hero?: Hero;
+	intro?: { heading?: string; text?: string };
+	recruitmentEmail?: string;
+	noVacanciesText?: string;
+	seo?: Seo;
+}
+
+interface Vacancy {
+	_id: string;
+	title: string;
+	slug: string;
+	location?: string;
+	summary?: string;
+}
+
+const { data } = await loadQuery<{ page?: CareersPage; vacancies: Vacancy[] }>({
+	query: `{
+		"page": *[_id == "careersPage"][0]{ ..., hero{ ..., image${IMAGE} }, seo{ ..., ogImage${IMAGE} } },
+		"vacancies": *[_type == "vacancy" && defined(slug.current)] | order(orderRank) { _id, title, "slug": slug.current, location, summary }
+	}`,
+});
+
+const page = data?.page;
+const vacancies = data?.vacancies ?? [];
+---
+
+<Layout
+	title={page?.seo?.metaTitle ?? 'Careers'}
+	description={page?.seo?.metaDescription ?? page?.intro?.text}
+	image={page?.seo?.ogImage?.url}>
+	<PageHero
+		title={page?.hero?.title ?? 'Work With Us'}
+		subtitle={page?.hero?.subtitle}
+		image={page?.hero?.image}
+		align='center'
+	/>
+
+	<section class='content-wrapper py-15 md:py-17.5'>
+		<div class='grid grid-cols-12 gap-y-10 md:gap-x-6.5 items-start'>
+			<!-- Left: intro + recruitment contact -->
+			<div class='col-span-12 md:col-span-5 flex flex-col items-start gap-3 md:sticky md:top-32'>
+				<h2 class='text-text-primary'>{page?.intro?.heading ?? 'Join our team'}</h2>
+				{page?.intro?.text && <p class='text-text-primary whitespace-pre-line'>{page.intro.text}</p>}
+
+				{
+					page?.recruitmentEmail && (
+						<div class='flex items-start gap-4 mt-7'>
+							<span class='inline-flex items-center justify-center p-2.5 rounded-xl bg-primary-100 text-bsw-orange-text shrink-0'>
+								<Mail size={22} stroke-width={1.5} />
+							</span>
+							<span class='flex flex-col'>
+								<span class='text-sm text-text-secondary'>Email our recruitment team</span>
+								<a
+									href={`mailto:${page.recruitmentEmail}`}
+									class='font-semibold text-text-primary hover:text-bsw-orange-text transition-colors'>
+									{page.recruitmentEmail}
+								</a>
+							</span>
+						</div>
+					)
+				}
+			</div>
+
+			<!-- Right: open roles -->
+			<div class='col-span-12 md:col-span-7 flex flex-col gap-5'>
+				<p class='uppercase-tag text-bsw-orange-text'>Current vacancies</p>
+				{
+					vacancies.length > 0 ? (
+						vacancies.map((vacancy) => (
+							<VacancyCard
+								title={vacancy.title}
+								location={vacancy.location}
+								summary={vacancy.summary}
+								slug={vacancy.slug}
+							/>
+						))
+					) : (
+						<p class='bg-light-grey-bg rounded-2xl px-7 py-8 md:px-9 text-text-primary'>
+							{page?.noVacanciesText ?? "We don't have any open roles right now, but we're always happy to hear from talented people."}
+						</p>
+					)
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

@@ -1,5 +1,6 @@
 import { loadQuery } from './load-query';
 import { IMAGE } from './image';
+import { LINK } from './link';
 import type { Link, Seo } from './types';
 
 export interface SiteSettings {
@@ -44,7 +45,9 @@ export function getSiteSettings(): Promise<SiteSettings> {
 }
 
 export function getFooter(): Promise<Footer> {
-	footer ??= loadQuery<Footer>({ query: `*[_id == "footer"][0]` }).then(({ data }) => data ?? {});
+	footer ??= loadQuery<Footer>({
+		query: `*[_id == "footer"][0]{ ..., column3{ ..., links[]${LINK} }, column4{ ..., links[]${LINK} } }`,
+	}).then(({ data }) => data ?? {});
 	return footer;
 }
 

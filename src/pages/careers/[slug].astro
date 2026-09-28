@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArticleHero from '../../components/ArticleHero.astro';
+import ArticleContent from '../../components/ArticleContent.astro';
+import RichText from '../../components/RichText.astro';
+import Button from '../../components/Button.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE } from '../../sanity/lib/image';
+import { RICH_TEXT } from '../../sanity/lib/rich-text';
+import type { PortableTextBlock, Seo } from '../../sanity/lib/types';
+
+interface Vacancy {
+	title: string;
+	slug: string;
+	summary?: string;
+	location?: string;
+	reportingTo?: string;
+	hours?: string;
+	holiday?: string;
+	pension?: string;
+	applyUrl?: string;
+	content?: PortableTextBlock[];
+	seo?: Seo;
+}
+
+export async function getStaticPaths() {
+	const { data } = await loadQuery<{ vacancies: Vacancy[]; recruitmentEmail?: string }>({
+		query: `{
+			"vacancies": *[_type == "vacancy" && defined(slug.current)]{
+				...,
+				"slug": slug.current,
+				content${RICH_TEXT},
+				seo{ ..., ogImage${IMAGE} }
+			},
+			"recruitmentEmail": *[_id == "careersPage"][0].recruitmentEmail
+		}`,
+	});
+	return (data?.vacancies ?? []).map((vacancy) => ({
+		params: { slug: vacancy.slug },
+		props: { vacancy, recruitmentEmail: data?.recruitmentEmail },
+	}));
+}
+
+const { vacancy, recruitmentEmail } = Astro.props as { vacancy: Vacancy; recruitmentEmail?: string };
+const { title, summary, location, reportingTo, hours, holiday, pension, applyUrl, content, seo } = vacancy;
+
+const details = [
+	{ label: 'Location', value: location },
+	{ label: 'Reporting to', value: reportingTo },
+	{ label: 'Hours', value: hours },
+	{ label: 'Holiday', value: holiday },
+	{ label: 'Pension', value: pension },
+].filter((detail) => detail.value);
+
+const applyHref =
+	applyUrl ?? (recruitmentEmail ? `mailto:${recruitmentEmail}?subject=${encodeURIComponent(`Application: ${title}`)}` : undefined);
+---
+
+<Layout title={seo?.metaTitle ?? `${title} — Careers`} description={seo?.metaDescription ?? summary} image={seo?.ogImage?.url}>
+	<ArticleHero tag='Careers' title={title} summary={summary}>
+		{
+			details.length > 0 && (
+				<dl class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5.25 w-full max-w-199.5 mt-9.5 text-left'>
+					{details.map((detail) => (
+						<div class='bg-bsw-navy rounded-2xl px-6.5 py-5 flex flex-col gap-1.5'>
+							<dt class='uppercase-tag text-text-secondary-dark'>{detail.label}</dt>
+							<dd class='font-semibold leading-5.5 text-white'>{detail.value}</dd>
+						</div>
+					))}
+				</dl>
+			)
+		}
+		{applyHref && (
+			<Button href={applyHref} target={applyUrl ? '_blank' : undefined} class='mt-9.5'>
+				Apply now
+			</Button>
+		)}
+	</ArticleHero>
+
+	<article class='article-wrapper pt-15 pb-20 md:pb-25 flex flex-col gap-12.5'>
+		<ArticleContent>
+			<RichText value={content} />
+		</ArticleContent>
+
+		{
+			applyHref && (
+				<div class='bg-bsw-navy rounded-2xl px-7 py-9 md:px-10 flex flex-col md:flex-row md:items-center justify-between gap-6'>
+					<div class='flex flex-col gap-1.5'>
+						<p class='text-h3 text-white'>Interested in this role?</p>
+						<p class='text-sm text-white/70'>We are an equal opportunities employer.</p>
+					</div>
+					<Button href={applyHref} target={applyUrl ? '_blank' : undefined}>
+						Apply now
+					</Button>
+				</div>
+			)
+		}
+	</article>
+</Layout>

@@ -1,0 +1,32 @@
+---
+import { MapPin } from '@lucide/astro';
+import LinkArrow from '../LinkArrow.astro';
+
+interface Props {
+	title: string;
+	location?: string;
+	summary?: string;
+	slug: string;
+}
+
+const { title, location, summary, slug } = Astro.props;
+---
+
+<a
+	href={`/careers/${slug}`}
+	class='group bg-light-grey-bg rounded-2xl px-7 py-8 md:px-9 flex flex-col items-start gap-3.5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
+	<h3 class='text-text-primary group-hover:text-bsw-orange-text transition-colors'>{title}</h3>
+
+	{
+		location && (
+			<p class='flex items-center gap-1.5 text-sm font-medium text-text-secondary'>
+				<MapPin size={16} stroke-width={1.5} class='text-bsw-orange-text shrink-0' />
+				{location}
+			</p>
+		)
+	}
+
+	{summary && <p class='text-text-primary text-sm leading-5.25'>{summary}</p>}
+
+	<LinkArrow text='View role' class='mt-2' />
+</a>

@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import { loadQuery } from '../../sanity/lib/load-query';
+import { IMAGE, type SanityImage } from '../../sanity/lib/image';
+
+interface Article {
+	_id: string;
+	title: string;
+	summary?: string;
+	articleDate?: string;
+	slug: string;
+	image?: SanityImage;
+}
+
+const { data } = await loadQuery<Article[]>({
+	query: `*[_type == "newsArticle" && defined(slug.current)] | order(articleDate desc) {
+		_id,
+		title,
+		summary,
+		articleDate,
+		"slug": slug.current,
+		"image": featureImage${IMAGE}
+	}`,
+});
+
+const articles = data ?? [];
+---
+
+<Layout title='News' description='The latest news, contract wins and updates from BSW Heating.'>
+	<PageHero title='News' subtitle='The latest news, contract wins and updates from BSW Heating.' align='center' />
+
+	<section class='content-wrapper py-15 md:py-17.5'>
+		{
+			articles.length > 0 ? (
+				<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-5.5 gap-y-5'>
+					{articles.map((article) => (
+						<NewsCard
+							title={article.title}
+							summary={article.summary}
+							articleDate={article.articleDate}
+							image={article.image}
+							slug={article.slug}
+						/>
+					))}
+				</div>
+			) : (
+				<p class='text-center text-text-secondary'>There's no news yet. Check back soon.</p>
+			)
+		}
+	</section>
+</Layout>

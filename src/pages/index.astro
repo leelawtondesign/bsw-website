@@ -7,6 +7,7 @@ import LatestNewsSection from '../components/home/LatestNewsSection.astro';
 import CustomersSection from '../components/home/CustomersSection.astro';
 import ContactFormSection from '../components/home/ContactFormSection.astro';
 import { loadQuery } from '../sanity/lib/load-query';
+import { LINK } from '../sanity/lib/link';
 import { IMAGE, type SanityImage } from '../sanity/lib/image';
 import type { ImageTextSection, Link, PortableTextBlock, Seo } from '../sanity/lib/types';
 
@@ -26,6 +27,8 @@ const { data: page } = await loadQuery<HomePage>({
 	query: `*[_id == "homePage"][0]{
 		...,
 		heroImage${IMAGE},
+		heroMainButton${LINK},
+		heroSecondaryButton${LINK},
 		about{ ..., image${IMAGE} },
 		seo{ ..., ogImage${IMAGE} }
 	}`,
